@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kahve Demleme Yardımcısı</title>
+    <style>
+    .site-content {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    select, input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    #brewDisplay {
+        font-family: monospace;
+        font-size: 2.5em;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    #brewStartStop {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    #brewStartStop:hover {
+        background-color: #45a049;
+    }
+
+    #brewStep {
+        padding: 15px;
+        background-color: #e8f5e9;
+        border-radius: 4px;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    </style>
+</head>
+<body>
+    <div class="site-content">
+        <h2 style="text-align: center;">Kahve Demleme Yardımcısı</h2>
+
+        <div class="form-group">
+            <label>Demleme Metodu:</label>
+            <select id="brewMethod">
+                <option value="v60">V60</option>
+                <option value="chemex">Chemex</option>
+                <option value="aeropress">AeroPress</option>
+            </select>
+        </div>
+
+        <div class="grid">
+            <div>
+                <label>Kahve (g):</label>
+                <input type="number" id="brewCoffee" value="20" min="1">
+            </div>
+            <div>
+                <label>Su (ml):</label>
+                <input type="number" id="brewWater" value="300" min="1">
+            </div>
+        </div>
+
+        <div id="brewDisplay">00:00</div>
+
+        <button id="brewStartStop">Başlat</button>
+
+        <div id="brewStep">Filtre kağıdını ıslatın ve ön ısıtma yapın</div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tüm gerekli DOM elementlerini seç
+        const methodSelect = document.getElementById('brewMethod');
+        const coffeeInput = document.getElementById('brewCoffee');
+        const waterInput = document.getElementById('brewWater');
+        const display = document.getElementById('brewDisplay');
+        const startButton = document.getElementById('brewStartStop');
+        const stepDisplay = document.getElementById('brewStep');
+
+        // Demleme adımları
+        const brewSteps = {
+            v60: [
+                { time: 0, action: 'Filtre kağıdını ıslatın ve ön ısıtma yapın' },
+                { time: 30, action: 'Kahveyi ekleyin ve bloom için 50ml su ekleyin' },
+                { time: 45, action: 'Dairesel hareketlerle karıştırın' },
+                { time: 60, action: '100ml su ekleyin' },
+                { time: 90, action: '100ml su ekleyin' },
+                { time: 120, action: 'Son 50ml suyu ekleyin' },
+                { time: 180, action: 'Demleme tamamlandı' }
+            ],
+            chemex: [
+                { time: 0, action: 'Filtre kağıdını ıslatın ve ön ısıtma yapın' },
+                { time: 30, action: 'Kahveyi ekleyin ve bloom için 60ml su ekleyin' },
+                { time: 45, action: 'Dairesel hareketlerle karıştırın' },
+                { time: 60, action: '120ml su ekleyin' },
+                { time: 120, action: '120ml su ekleyin' },
+                { time: 180, action: 'Demleme tamamlandı' }
+            ],
+            aeropress: [
+                { time: 0, action: 'Filtreyi yerleştirin ve ıslatın' },
+                { time: 15, action: 'Kahveyi ekleyin' },
+                { time: 30, action: 'Tüm suyu ekleyin ve karıştırın' },
+                { time: 90, action: 'Press işlemine başlayın' },
+                { time: 120, action: 'Demleme tamamlandı' }
+            ]
+        };
+
+        let seconds = 0;
+        let timerInterval = null;
+        let isRunning = false;
+
+        // Zamanı biçimlendirme fonksiyonu
+        function formatTime(secs) {
+            const minutes = Math.floor(secs / 60);
+            const remainingSeconds = secs % 60;
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Adımı güncelleme fonksiyonu
+        function updateStep() {
+            const currentMethod = methodSelect.value;
+            const steps = brewSteps[currentMethod];
+            
+            for (let i = steps.length - 1; i >= 0; i--) {
+                if (seconds >= steps[i].time) {
+                    stepDisplay.textContent = steps[i].action;
+                    break;
+                }
+            }
+        }
+
+        // Başlat/Durdur butonu event listener'ı
+        startButton.addEventListener('click', function() {
+            if (!isRunning) {
+                // Zamanlayıcıyı başlat
+                timerInterval = setInterval(function() {
+                    seconds++;
+                    display.textContent = formatTime(seconds);
+                    updateStep();
+                }, 1000);
+                startButton.textContent = 'Durdur';
+                startButton.style.backgroundColor = '#FF6347'; // Durdur butonu için kırmızı renk
+            } else {
+                // Zamanlayıcıyı durdur
+                clearInterval(timerInterval);
+                seconds = 0;
+                display.textContent = formatTime(seconds);
+                startButton.textContent = 'Başlat';
+                startButton.style.backgroundColor = '#4CAF50'; // Başlat butonu için yeşil renk
+                stepDisplay.textContent = 'Filtre kağıdını ıslatın ve ön ısıtma yapın';
+            }
+            isRunning = !isRunning;
+        });
+
+        // Kahve miktarı değiştiğinde su miktarını otomatik hesapla
+        coffeeInput.addEventListener('input', function() {
+            const coffeeAmount = parseInt(this.value);
+            if (!isNaN(coffeeAmount) && coffeeAmount > 0) {
+                waterInput.value = coffeeAmount * 15;
+            }
+        });
+
+        // Demleme metodu değiştiğinde
+        methodSelect.addEventListener('change', function() {
+            // Eğer zamanlayıcı çalışıyorsa durdur
+            if (isRunning) {
+                clearInterval(timerInterval);
+                seconds = 0;
+                display.textContent = formatTime(seconds);
+                startButton.textContent = 'Başlat';
+                startButton.style.backgroundColor = '#4CAF50';
+                isRunning = false;
+            }
+            updateStep();
+        });
+
+        // İlk yükleme adımını güncelle
+        updateStep();
+    });
+    </script>
+</body>
+</html>
