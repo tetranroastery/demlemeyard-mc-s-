@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kahve İhtiyacı Hesaplayıcı</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        #result {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            display: none;
+        }
+
+        #result.show {
+            display: block;
+        }
+
+        .reference-card {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .reference-card h4 {
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
+
+        .reference-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .result-text {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aylık Kahve İhtiyacı Hesaplayıcı</h1>
+        
+        <div class="form-group">
+            <label for="dailyCups">Günlük kaç fincan kahve içiyorsunuz?</label>
+            <input type="number" id="dailyCups" min="1" value="2">
+        </div>
+
+        <div class="form-group">
+            <label for="peopleCount">Kaç kişi için hesaplama yapıyorsunuz?</label>
+            <input type="number" id="peopleCount" min="1" value="1">
+        </div>
+
+        <div class="form-group">
+            <label for="brewMethod">Tercih ettiğiniz demleme yöntemi</label>
+            <select id="brewMethod">
+                <option value="filter">Filtre Kahve</option>
+                <option value="espresso">Espresso</option>
+                <option value="frenchpress">French Press</option>
+                <option value="turkishcoffee">Türk Kahvesi</option>
+            </select>
+        </div>
+
+        <button onclick="calculateCoffeeNeed()">Hesapla</button>
+
+        <div id="result">
+            <h3 class="result-text">Aylık İhtiyacınız:</h3>
+            <p id="monthlyAmount" class="result-text"></p>
+            <p id="packageCount" class="result-text"></p>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+        <h3 style="margin-bottom: 1rem; font-size: 1.1rem; color: #666;">Referans Değerleri (Fincan Başına)</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div class="reference-card">
+                <h4>☕ Filtre Kahve</h4>
+                <p>15 gram kahve / fincan</p>
+            </div>
+            <div class="reference-card">
+                <h4>☕ Espresso</h4>
+                <p>18 gram kahve / shot</p>
+            </div>
+            <div class="reference-card">
+                <h4>☕ French Press</h4>
+                <p>15 gram kahve / fincan</p>
+            </div>
+            <div class="reference-card">
+                <h4>☕ Türk Kahvesi</h4>
+                <p>7 gram kahve / fincan</p>
+            </div>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666; text-align: center;">
+            * Bu değerler ortalama tüketim miktarlarıdır. Kişisel damak zevkinize göre ayarlama yapabilirsiniz.
+        </p>
+    </div>
+
+    <script>
+        const coffeePerCup = {
+            filter: 15,
+            espresso: 18,
+            frenchpress: 15,
+            turkishcoffee: 7
+        };
+
+        const packageSize = 250; // gram
+
+        function calculateCoffeeNeed() {
+            const dailyCups = parseInt(document.getElementById('dailyCups').value);
+            const peopleCount = parseInt(document.getElementById('peopleCount').value);
+            const brewMethod = document.getElementById('brewMethod').value;
+
+            if (dailyCups < 1 || peopleCount < 1) {
+                alert('Lütfen geçerli değerler girin');
+                return;
+            }
+
+            const dailyCoffeeNeed = dailyCups * peopleCount * coffeePerCup[brewMethod];
+            const monthlyNeed = dailyCoffeeNeed * 30;
+            const packageCount = Math.ceil(monthlyNeed / packageSize);
+
+            document.getElementById('monthlyAmount').textContent = 
+                `Toplam: ${monthlyNeed} gram kahve`;
+            document.getElementById('packageCount').textContent = 
+                `Önerilen: ${packageCount} adet ${packageSize}g paket`;
+            
+            document.getElementById('result').classList.add('show');
+        }
+    </script>
+</body>
+</html>
