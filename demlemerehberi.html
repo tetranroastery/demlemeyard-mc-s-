@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra N Roastery Demleme Rehberi</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .timer {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .time {
+            font-size: 48px;
+            font-weight: bold;
+            font-family: monospace;
+            margin: 16px 0;
+        }
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #4299e1;
+            transition: width 1s linear;
+        }
+        .buttons {
+            text-align: center;
+            margin: 24px 0;
+        }
+        button {
+            padding: 12px 24px;
+            margin: 0 8px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .start { background: #48bb78; color: white; }
+        .pause { background: #ecc94b; color: white; }
+        .reset { background: #f56565; color: white; }
+        .instructions {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .instructions.active {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+        }
+        .instructions h3 {
+            margin-bottom: 12px;
+        }
+        .instructions p {
+            margin-bottom: 8px;
+        }
+        .next-step {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #ddd;
+        }
+        .reference {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tetra N Roastery Demleme Rehberi</h1>
+        
+        <div class="selections">
+            <label for="coffee">İşleme Yöntemi</label>
+            <select id="coffee">
+                <option value="">İşleme yöntemi seçin</option>
+                <option value="yikanmis">Yıkanmış</option>
+                <option value="naturel">Naturel</option>
+                <option value="honey">Honey</option>
+                <option value="fermente">Fermente</option>
+            </select>
+
+            <label for="property">Hedeflenen Özellik</label>
+            <select id="property">
+                <option value="">Özellik seçin</option>
+                <option value="tatlilik">Tatlılık</option>
+                <option value="asidite">Asidite</option>
+                <option value="govde">Gövde</option>
+                <option value="denge">Denge</option>
+            </select>
+        </div>
+
+        <div class="timer">
+            <div class="time" id="time">00:00</div>
+            <div class="progress">
+                <div class="progress-bar" id="progress"></div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="startBtn" class="start">Başlat</button>
+            <button id="resetBtn" class="reset">Sıfırla</button>
+        </div>
+
+        <div class="instructions" id="instructions" style="display:none">
+            <h3>Adım <span id="stepNumber">1</span>/<span id="totalSteps">3</span></h3>
+            <p><strong>Zaman:</strong> <span id="stepTime"></span></p>
+            <p><strong>Su Miktarı:</strong> <span id="waterAmount"></span></p>
+            <p><strong>Toplam Su:</strong> <span id="totalWater"></span></p>
+            <p><strong>İşlem:</strong> <span id="instruction"></span></p>
+            <div class="next-step" id="nextStep"></div>
+        </div>
+
+        <div id="reference" class="reference" style="display:none"></div>
+    </div>
+
+    <script>
+        let timer = null;
+        let isRunning = false;
+        let currentTime = 0;
+        let currentStep = 0;
+        let totalTime = 0;
+        let currentRecipe = null;
+
+        const data = {
+            yikanmis: {
+                referansOran: '15:240 - 1:16',
+                tatlilik: {
+                    steps: [
+                        { startTime: 0, endTime: 30, water: '+50 gr', total: '50', instruction: 'Ön Demleme' },
+                        { startTime: 30, endTime: 45, water: '+100 gr', total: '150', instruction: '2. Döküş' },
+                        { startTime: 60, endTime: 75, water: '+80 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 160 // 2:40
+                },
+                asidite: {
+                    steps: [
+                        { startTime: 0, endTime: 20, water: '+30 gr', total: '30', instruction: 'Ön Demleme' },
+                        { startTime: 20, endTime: 35, water: '+100 gr', total: '130', instruction: '2. Döküş' },
+                        { startTime: 40, endTime: 60, water: '+110 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 120 // 2:00
+                },
+                govde: {
+                    steps: [
+                        { startTime: 0, endTime: 45, water: '+60 gr', total: '60', instruction: 'Ön Demleme' },
+                        { startTime: 45, endTime: 60, water: '+90 gr', total: '150', instruction: '2. Döküş' },
+                        { startTime: 80, endTime: 100, water: '+90 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 170 // 2:50
+                },
+                denge: {
+                    steps: [
+                        { startTime: 0, endTime: 40, water: '+40 gr', total: '40', instruction: 'Ön Demleme' },
+                        { startTime: 40, endTime: 50, water: '+100 gr', total: '140', instruction: '2. Döküş' },
+                        { startTime: 65, endTime: 80, water: '+100 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 165 // 2:45
+                }
+            },
+            naturel: {
+                referansOran: '16:240 - 1:15',
+                tatlilik: {
+                    steps: [
+                        { startTime: 0, endTime: 40, water: '+35 gr', total: '35', instruction: 'Ön Demleme' },
+                        { startTime: 40, endTime: 60, water: '+95 gr', total: '140', instruction: '2. Döküş' },
+                        { startTime: 80, endTime: 100, water: '+100 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 170 // 2:50
+                },
+                asidite: {
+                    steps: [
+                        { startTime: 0, endTime: 20, water: '+25 gr', total: '25', instruction: 'Ön Demleme' },
+                        { startTime: 20, endTime: 35, water: '+80 gr', total: '105', instruction: '2. Döküş' },
+                        { startTime: 40, endTime: 60, water: '+130 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 120 // 2:00
+                },
+                govde: {
+                    steps: [
+                        { startTime: 0, endTime: 60, water: '+80 gr', total: '80', instruction: 'Ön Demleme' },
+                        { startTime: 60, endTime: 75, water: '+100 gr', total: '180', instruction: '2. Döküş' },
+                        { startTime: 95, endTime: 110, water: '+80 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 190 // 3:10
+                },
+                denge: {
+                    steps: [
+                        { startTime: 0, endTime: 40, water: '+40 gr', total: '40', instruction: 'Ön Demleme' },
+                        { startTime: 40, endTime: 60, water: '+120 gr', total: '160', instruction: '2. Döküş' },
+                        { startTime: 75, endTime: 90, water: '+80 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 160 // 2:40
+                }
+            },
+            honey: {
+                referansOran: '16:240 - 1:15',
+                tatlilik: {
+                    steps: [
+                        { startTime: 0, endTime: 40, water: '+50 gr', total: '50', instruction: 'Ön Demleme' },
+                        { startTime: 40, endTime: 60, water: '+100 gr', total: '150', instruction: '2. Döküş' },
+                        { startTime: 80, endTime: 100, water: '+80 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 165 // 2:45
+                },
+                asidite: {
+                    steps: [
+                        { startTime: 0, endTime: 20, water: '+30 gr', total: '30', instruction: 'Ön Demleme' },
+                        { startTime: 20, endTime: 30, water: '+90 gr', total: '120', instruction: '2. Döküş' },
+                        { startTime: 40, endTime: 60, water: '+120 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 125 // 2:05
+                },
+                govde: {
+                    steps: [
+                        { startTime: 0, endTime: 50, water: '+80 gr', total: '80', instruction: 'Ön Demleme' },
+                        { startTime: 70, endTime: 90, water: '+100 gr', total: '180', instruction: '2. Döküş' },
+                        { startTime: 120, endTime: 140, water: '+60 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 190 // 3:10
+                },
+                denge: {
+                    steps: [
+                        { startTime: 0, endTime: 40, water: '+60 gr', total: '60', instruction: 'Ön Demleme' },
+                        { startTime: 50, endTime: 60, water: '+80 gr', total: '140', instruction: '2. Döküş' },
+                        { startTime: 80, endTime: 90, water: '+100 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 150 // 2:30
+                }
+            },
+            fermente: {
+                referansOran: '15:240 - 1:16',
+                tatlilik: {
+                    steps: [
+                        { startTime: 0, endTime: 30, water: '+40 gr', total: '40', instruction: 'Ön Demleme' },
+                        { startTime: 30, endTime: 50, water: '+100 gr', total: '140', instruction: '2. Döküş' },
+                        { startTime: 70, endTime: 90, water: '+100 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 150 // 2:30
+                },
+                asidite: {
+                    steps: [
+                        { startTime: 0, endTime: 20, water: '+30 gr', total: '30', instruction: 'Ön Demleme' },
+                        { startTime: 20, endTime: 30, water: '+70 gr', total: '100', instruction: '2. Döküş' },
+                        { startTime: 40, endTime: 50, water: '+140 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 135 // 2:15
+                },
+                govde: {
+                    steps: [
+                        { startTime: 0, endTime: 60, water: '+60 gr', total: '60', instruction: 'Ön Demleme' },
+                        { startTime: 70, endTime: 80, water: '+90 gr', total: '160', instruction: '2. Döküş' },
+                        { startTime: 90, endTime: 110, water: '+80 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 170 // 2:50
+                },
+               denge: {
+                    steps: [
+                        { startTime: 0, endTime: 45, water: '+60 gr', total: '60', instruction: 'Ön Demleme' },
+                        { startTime: 45, endTime: 60, water: '+90 gr', total: '150', instruction: '2. Döküş' },
+                        { startTime: 75, endTime: 90, water: '+90 gr', total: '240', instruction: '3. Döküş' }
+                    ],
+                    totalTime: 160 // 2:40
+                }
+            }
+        };
+
+        // DOM Elements
+        const coffeeSelect = document.getElementById('coffee');
+        const propertySelect = document.getElementById('property');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const timeDisplay = document.getElementById('time');
+        const progressBar = document.getElementById('progress');
+        const instructionsDiv = document.getElementById('instructions');
+        const referenceDiv = document.getElementById('reference');
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function updateDisplay() {
+            // Update timer display
+            timeDisplay.textContent = formatTime(currentTime);
+            
+            // Update progress bar
+            const progress = (currentTime / totalTime) * 100;
+            progressBar.style.width = `${Math.min(progress, 100)}%`;
+
+            // Update current step
+            if (currentRecipe) {
+                const steps = currentRecipe.steps;
+                let newStep = steps.findIndex(step => 
+                    currentTime >= step.startTime && currentTime <= step.endTime
+                );
+                if (newStep === -1) {
+                    newStep = steps.findIndex(step => currentTime < step.startTime);
+                    if (newStep === -1) newStep = steps.length - 1;
+                    else newStep = Math.max(0, newStep - 1);
+                }
+
+                if (newStep !== currentStep) {
+                    currentStep = newStep;
+                    updateInstructions();
+                }
+
+                // Update next step info
+                const nextStep = document.getElementById('nextStep');
+                if (currentStep < steps.length - 1) {
+                    const currentEndTime = steps[currentStep].endTime;
+                    const nextStartTime = steps[currentStep + 1].startTime;
+                    const timeUntilNext = steps[currentStep + 1].startTime - currentTime;
+
+                    if (currentTime > currentEndTime && currentTime < nextStartTime) {
+                        nextStep.textContent = `${formatTime(timeUntilNext)} saniye BEKLEYİN`;
+                        nextStep.style.color = '#2563eb'; // Mavi renk
+                    } else if (timeUntilNext <= 10 && timeUntilNext > 0) {
+                        nextStep.textContent = `Dikkat: ${timeUntilNext} saniye sonra sonraki adım!`;
+                        nextStep.style.color = '#e53e3e'; // Kırmızı renk
+                    } else if (currentTime <= currentEndTime) {
+                        nextStep.textContent = `Bu adımı tamamlayın`;
+                        nextStep.style.color = '#059669'; // Yeşil renk
+                    }
+                } else {
+                    // Son adım için
+                    const lastStep = steps[steps.length - 1];
+                    const remainingTime = totalTime - currentTime;
+
+                    if (currentTime <= lastStep.endTime) {
+                        nextStep.textContent = `Son adımı tamamlayın`;
+                        nextStep.style.color = '#059669';
+                    } else if (currentTime > lastStep.endTime && remainingTime > 0) {
+                        nextStep.textContent = `Demlemenin tamamlanmasını bekleyin (${formatTime(remainingTime)})`;
+                        nextStep.style.color = '#2563eb';
+                    } else {
+                        nextStep.textContent = 'Demleme tamamlandı!';
+                        nextStep.style.color = '#059669';
+                    }
+                }
+            }
+        }
+
+        function updateInstructions() {
+            if (!currentRecipe) return;
+            
+            const step = currentRecipe.steps[currentStep];
+            document.getElementById('stepNumber').textContent = currentStep + 1;
+            document.getElementById('totalSteps').textContent = currentRecipe.steps.length;
+            document.getElementById('stepTime').textContent = `${formatTime(step.startTime)}-${formatTime(step.endTime)}`;
+            document.getElementById('waterAmount').textContent = step.water;
+            document.getElementById('totalWater').textContent = step.total;
+            document.getElementById('instruction').textContent = step.instruction;
+            
+            instructionsDiv.classList.add('active');
+            setTimeout(() => instructionsDiv.classList.remove('active'), 300);
+        }
+
+        function startTimer() {
+            if (!currentRecipe) {
+                alert('Lütfen işleme yöntemi ve özellik seçin');
+                return;
+            }
+
+            if (!isRunning) {
+                isRunning = true;
+                startBtn.textContent = 'Duraklat';
+                startBtn.classList.remove('start');
+                startBtn.classList.add('pause');
+                
+                timer = setInterval(() => {
+                    currentTime++;
+                    if (currentTime >= totalTime) {
+                        stopTimer();
+                    }
+                    updateDisplay();
+                }, 1000);
+            } else {
+                stopTimer();
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            startBtn.textContent = 'Başlat';
+            startBtn.classList.remove('pause');
+            startBtn.classList.add('start');
+        }
+
+        function resetTimer() {
+            stopTimer();
+            currentTime = 0;
+            currentStep = 0;
+            updateDisplay();
+            if (currentRecipe) {
+                updateInstructions();
+            }
+        }
+
+        function updateRecipe() {
+            const coffeeType = coffeeSelect.value;
+            const property = propertySelect.value;
+            
+            if (coffeeType && property && data[coffeeType]?.[property]) {
+                currentRecipe = data[coffeeType][property];
+                totalTime = currentRecipe.totalTime;
+                currentStep = 0;
+                instructionsDiv.style.display = 'block';
+                referenceDiv.style.display = 'block';
+                referenceDiv.textContent = `Referans Oran: ${data[coffeeType].referansOran}`;
+                resetTimer();
+                updateInstructions();
+            } else {
+                currentRecipe = null;
+                instructionsDiv.style.display = 'none';
+                referenceDiv.style.display = 'none';
+            }
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        coffeeSelect.addEventListener('change', updateRecipe);
+        propertySelect.addEventListener('change', updateRecipe);
+    </script>
+</body>
+</html>
