@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        .chart-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .title {
+            text-align: center;
+            color: #4A3728;
+            font-family: Arial, sans-serif;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h2 class="title">Global Coffee Production by Country</h2>
+        <p class="subtitle">Production in 60kg bags (2023-24)</p>
+        <canvas id="coffeeChart"></canvas>
+    </div>
+
+    <script>
+        const data = {
+            labels: [
+                'Brazil 🇧🇷', 'Vietnam 🇻🇳', 'Colombia 🇨🇴', 'Indonesia 🇮🇩', 
+                'Ethiopia 🇪🇹', 'Honduras 🇭🇳', 'India 🇮🇳', 'Uganda 🇺🇬', 
+                'Mexico 🇲🇽', 'Guatemala 🇬🇹'
+            ],
+            datasets: [{
+                label: 'Production (60kg bags)',
+                data: [
+                    44200000, 27500000, 13500000, 11000000,
+                    6400000, 5800000, 5800000, 4800000,
+                    3900000, 3400000
+                ],
+                backgroundColor: [
+                    '#8B4513', '#6F4E37', '#A0522D', '#8B4513',
+                    '#6F4E37', '#A0522D', '#8B4513', '#6F4E37',
+                    '#A0522D', '#8B4513'
+                ],
+                borderColor: '#5C2E0E',
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed.y;
+                                return `Production: ${value.toLocaleString()} bags`;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Production (60kg bags)',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const ctx = document.getElementById('coffeeChart').getContext('2d');
+        new Chart(ctx, config);
+    </script>
+</body>
+</html>
