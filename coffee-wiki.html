@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra N Roastery - Kahve Bilgileri</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #63452C;
+            --secondary: #E9D8CA;
+            --accent: #BE8C63;
+            --background: #F8F3ED;
+            --text: #33272A;
+        }
+        body {
+            background-color: var(--background);
+            font-family: system-ui, -apple-system, sans-serif;
+            color: var(--text);
+        }
+        .wiki-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .wiki-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .wiki-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .section-header {
+            background: linear-gradient(to right, #63452C, #8B5E3C);
+            color: white;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .section-header:hover {
+            background: linear-gradient(to right, #735036, #9E6B44);
+        }
+        .section-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+        .section-content.active {
+            padding: 1.5rem;
+            max-height: 5000px; /* Large enough to contain content */
+        }
+        .coffee-tag {
+            display: inline-block;
+            background-color: #E9D8CA;
+            color: #63452C;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+        .coffee-tag:hover {
+            background-color: #BE8C63;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .origin-card {
+            border: 1px solid #E9D8CA;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        .origin-card:hover {
+            border-color: var(--accent);
+            background-color: #FDF9F6;
+            transform: scale(1.02);
+        }
+        .variety-card {
+            border: 1px solid #E9D8CA;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: all 0.3s;
+        }
+        .variety-card:hover {
+            border-color: var(--accent);
+            background-color: #FDF9F6;
+            transform: scale(1.02);
+        }
+        .altitude-card {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+        .altitude-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.7;
+            z-index: -1;
+            transition: all 0.3s;
+        }
+        .altitude-card:hover {
+            transform: translateY(-3px);
+        }
+        .altitude-card:hover::before {
+            opacity: 0.9;
+        }
+        .low-altitude::before {
+            background: linear-gradient(135deg, #7FB3D5, #D4EFDF);
+        }
+        .medium-altitude::before {
+            background: linear-gradient(135deg, #D4EFDF, #FCF3CF);
+        }
+        .high-altitude::before {
+            background: linear-gradient(135deg, #FCF3CF, #F5B7B1);
+        }
+        .very-high-altitude::before {
+            background: linear-gradient(135deg, #F5B7B1, #D2B4DE);
+        }
+        .processing-card {
+            border-left-width: 4px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        .processing-card:hover {
+            transform: translateX(5px);
+        }
+        .flavor-card {
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s;
+        }
+        .flavor-card:hover {
+            transform: scale(1.05);
+        }
+        .accent-text {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .footer {
+            background: linear-gradient(to right, #3C2A1E, #63452C);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .icon-rotate {
+            transition: transform 0.3s;
+        }
+        .rotate-icon {
+            transform: rotate(180deg);
+        }
+        /* Coffee bean decorative elements */
+        .coffee-bean {
+            position: absolute;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        .coffee-bean-1 {
+            top: 10%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2363452C'%3E%3Cpath d='M12,5.37c-1.8,0-3.43,0.73-4.61,1.91C6.21,8.46,5.48,10.09,5.48,11.89c0,1.8,0.73,3.43,1.91,4.61 c1.18,1.18,2.81,1.91,4.61,1.91s3.43-0.73,4.61-1.91c1.18-1.18,1.91-2.81,1.91-4.61c0-1.8-0.73-3.43-1.91-4.61 C15.43,6.1,13.8,5.37,12,5.37z M12,17.42c-1.52,0-2.89-0.61-3.89-1.61c-1-1-1.61-2.37-1.61-3.89c0-1.52,0.61-2.89,1.61-3.89 c1-1,2.37-1.61,3.89-1.61c1.52,0,2.89,0.61,3.89,1.61c1,1,1.61,2.37,1.61,3.89c0,1.52-0.61,2.89-1.61,3.89 C14.89,16.81,13.52,17.42,12,17.42z'/%3E%3C/svg%3E");
+            transform: rotate(45deg);
+        }
+        .coffee-bean-2 {
+            bottom: 15%;
+            right: 8%;
+            width: 200px;
+            height: 200px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2363452C'%3E%3Cpath d='M12,5.37c-1.8,0-3.43,0.73-4.61,1.91C6.21,8.46,5.48,10.09,5.48,11.89c0,1.8,0.73,3.43,1.91,4.61 c1.18,1.18,2.81,1.91,4.61,1.91s3.43-0.73,4.61-1.91c1.18-1.18,1.91-2.81,1.91-4.61c0-1.8-0.73-3.43-1.91-4.61 C15.43,6.1,13.8,5.37,12,5.37z M12,17.42c-1.52,0-2.89-0.61-3.89-1.61c-1-1-1.61-2.37-1.61-3.89c0-1.52,0.61-2.89,1.61-3.89 c1-1,2.37-1.61,3.89-1.61c1.52,0,2.89,0.61,3.89,1.61c1,1,1.61,2.37,1.61,3.89c0,1.52-0.61,2.89-1.61,3.89 C14.89,16.81,13.52,17.42,12,17.42z'/%3E%3C/svg%3E");
+            transform: rotate(-30deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative elements -->
+    <div class="coffee-bean coffee-bean-1"></div>
+    <div class="coffee-bean coffee-bean-2"></div>
+
+    <div class="wiki-container relative">
+        <!-- Introduction -->
+        <section class="wiki-card">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="text-2xl font-bold">Kahve Dünyasına Hoş Geldiniz</h2>
+                <i class="fas fa-chevron-down icon-rotate"></i>
+            </div>
+            <div class="section-content active">
+                <p class="mb-4">Bir fincan kahvenin ardındaki hikaye, yetiştiği topraktan, ağacın çeşidine, rakımdan işlenme yöntemine kadar uzanan, uzun ve detaylı bir yolculuktur. Her adım, kahvenin karakterini ve lezzet profilini şekillendirir.</p>
+                <p class="mb-4">Bu sayfada, kahvenin karakterini belirleyen temel faktörleri inceliyor, dünya kahve haritasını çıkarıyor ve fincanınızdaki kahveyi daha bilinçli bir şekilde keyif almanız için bilgi sunuyoruz.</p>
+                <p>Kahve sadece bir içecek değil, binlerce kahve çiftçisinin, işlemcinin ve kavurucunun emeğiyle oluşan kültürel bir mirastır. Tetra N Roastery olarak bu mirası, <span class="accent-text">Ankara'dan sevgiyle</span> yaşatmaya devam ediyoruz.</p>
+            </div>
+        </section>
+
+        <!-- Coffee Origins -->
+        <section class="wiki-card">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="text-2xl font-bold">Kahve Orijinleri</h2>
+                <i class="fas fa-chevron-down icon-rotate"></i>
+            </div>
+            <div class="section-content">
+                <p class="mb-6">Kahvenin yetiştiği coğrafya, iklim koşulları, toprak özellikleri ve yerel işleme gelenekleri, kahvenin karakterini doğrudan etkiler. İşte dünya üzerindeki önemli kahve orijinleri:</p>
+                
+                <div class="space-y-6">
+                    <div class="origin-card">
+                        <h3 class="font-bold text-lg mb-2 text-primary">Etiyopya</h3>
+                        <p class="mb-2">Kahvenin anavatanı sayılan Etiyopya, dünyanın en zengin genetik kahve çeşitliliğine ev sahipliği yapar. Ydivia, Guji, Sidamo, Kochere, Yirgacheffe gibi bölgelerden gelen kahveler çiçeksi, meyvemsi ve baharatlı notalarla tanınır.</p>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yükseklik:</span> 1500-2300 metre</p>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yaygın Varyeteler:</span> Heirloom (binlerce yerel varyete), Gesha</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-primary mb-1">Tipik Notalar:</p>
+                                <div class="flex flex-wrap">
+                                    <span class="coffee-tag">Çiçeksi</span>
+                                    <span class="coffee-tag">Sitrus</span>
+                                    <span class="coffee-tag">Çay</span>
+                                    <span class="coffee-tag">Baharatlar</span>
+                                    <span class="coffee-tag">Böğürtlen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="origin-card">
+                        <h3 class="font-bold text-lg mb-2 text-primary">Kolombiya</h3>
+                        <p class="mb-2">Kahve üretimi için ideal koşullara sahip olan Kolombiya, tutarlı kalitesi ve dengeli kahve profilleriyle ünlüdür. Huila, Nariño, Cauca, Tolima bölgeleri önemli üretim bölgeleridir.</p>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yükseklik:</span> 1200-2000 metre</p>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yaygın Varyeteler:</span> Caturra, Castillo, Colombia, Typica, Bourbon, Pink Bourbon</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-primary mb-1">Tipik Notalar:</p>
+                                <div class="flex flex-wrap">
+                                    <span class="coffee-tag">Çikolata</span>
+                                    <span class="coffee-tag">Karamel</span>
+                                    <span class="coffee-tag">Turunçgiller</span>
+                                    <span class="coffee-tag">Kırmızı Meyveler</span>
+                                    <span class="coffee-tag">Fındık</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="origin-card">
+                        <h3 class="font-bold text-lg mb-2 text-primary">Guatemala</h3>
+                        <p class="mb-2">Volkanik topraklarda yetişen Guatemala kahveleri, belirgin karakteristikleriyle tanınır. Antigua, Huehuetenango, Cobán, Atitlán gibi bölgeler, kendine has profillerle öne çıkar.</p>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yükseklik:</span> 1300-2000 metre</p>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yaygın Varyeteler:</span> Bourbon, Catuai, Caturra, Pache</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-primary mb-1">Tipik Notalar:</p>
+                                <div class="flex flex-wrap">
+                                    <span class="coffee-tag">Çikolata</span>
+                                    <span class="coffee-tag">Karamel</span>
+                                    <span class="coffee-tag">Tropikal Meyveler</span>
+                                    <span class="coffee-tag">Baharatlar</span>
+                                    <span class="coffee-tag">Bal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="origin-card">
+                        <h3 class="font-bold text-lg mb-2 text-primary">Kosta Rika</h3>
+                        <p class="mb-2">Yenilikçi işleme teknikleri ve kalite kontrol sistemleriyle bilinen Kosta Rika, temiz profilli kahveler üretir. Tarrazu, West Valley, Central Valley önemli üretim bölgeleridir.</p>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yükseklik:</span> 1200-1900 metre</p>
+                                <p class="mb-2"><span class="font-semibold text-primary">Yaygın Varyeteler:</span> Caturra, Catuai, Villa Sarchi, Bourbon</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-primary mb-1">Tipik Notalar:</p>
+                                <div class="flex flex-wrap">
+                                    <span class="coffee-tag">Bal</span>
+                                    <span class="coffee-tag">Vanilya</span>
+                                    <span class="coffee-tag">Turunçgiller</span>
+                                    <span class="coffee-tag">Tropik Meyveler</span>
+                                    <span class="coffee-tag">Şekerkamışı</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coffee Varieties -->
+        <section class="wiki-card">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="text-2xl font-bold">Kahve Varyeteleri</h2>
+                <i class="fas fa-chevron-down icon-rotate"></i>
+            </div>
+            <div class="section-content">
+                <p class="mb-6">Varyete, kahve bitkisinin genetik çeşitliliğini ifade eder ve kahvenin lezzet profilinden verimine, hastalık direncinden yetişme koşullarına kadar birçok özelliği belirler. İşte en yaygın ve önemli kahve varyeteleri:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="variety-card">
+                        <div class="flex items-center mb-2">
+                            <div class="w-2 h-10 bg-yellow-600 mr-3 rounded-full"></div>
+                            <h3 class="font-bold text-lg text-primary">Bourbon</h3>
+                        </div>
+                        <p class="mb-2">Typica'dan gelen Bourbon, tatlılığı ve dengeli asiditiyle tanınır. Orijinal Bourbon, Kırmızı Bourbon olarak bilinir; ancak mutasyonlarla Sarı ve Pembe Bourbon varyeteleri de gelişmiştir.</p>
+                        <p><span class="font-semibold text-primary">Lezzet Profili:</span> Karamel, meyve, çikolata notaları, dengeli asidite</p>
+                    </div>
+                    
+                    <div class="variety-card">
+                        <div class="flex items-center mb-2">
+                            <div class="w-2 h-10 bg-green-600 mr-3 rounded-full"></div>
+                            <h3 class="font-bold text-lg text-primary">Typica</h3>
+                        </div>
+                        <p class="mb-2">Arabica kahve varyetelerinin atasıdır. Mükemmel cup kalitesi sunar ancak verimi düşüktür ve hastalıklara karşı hassastır.</p>
+                        <p><span class="font-semibold text-primary">Lezzet Profili:</span> Temiz, tatlı, hafif gövdeli, hoş asidite</p>
+                    </div>
+                    
+                    <div class="variety-card">
+                        <div class="flex items-center mb-2">
+                            <div class="w-2 h-10 bg-red-600 mr-3 rounded-full"></div>
+                            <h3 class="font-bold text-lg text-primary">Caturra</h3>
+                        </div>
+                        <p class="mb-2">Bourbon'un doğal bir mutasyonudur. Daha bodur ağaçları ve yüksek verimi ile tanınır.</p>
+                        <p><span class="font-semibold text-primary">Lezzet Profili:</span> Parlak asidite, orta gövde, dengeli tatlılık</p>
+                    </div>
+                    
+                    <div class="variety-card">
+                        <div class="flex items-center mb-2">
+                            <div class="w-2 h-10 bg-blue-600 mr-3 rounded-full"></div>
+                            <h3 class="font-bold text-lg text-primary">Catuai</h3>
+                        </div>
+                        <p class="mb-2">Mundo Novo ve Caturra'nın melezi olan bu varyete, yüksek verimlilik ve sert rüzgârlara dayanıklılık gösterir.</p>
+                        <p><span class="font-semibold text-primary">Lezzet Profili:</span> Orta gövde, yumuşak asidite, çikolatalı notalar</p>
+                    </div>
+                    
+                    <div class="variety-card">
+                        <div class="flex items-center mb-2">
+                            <div class="w-2 h-10 bg-purple-600 mr-3 rounded-full"></div>
+                            <h3 class="font-bold text-lg text-primary">Gesha/Geisha</h3>
+                        </div>
+                        <p class="mb-2">Etiyopya kökenli bu varyete, Panama'da keşfedilmiş ve olağanüstü lezzet profiliyle dünya çapında üne kavuşmuştur. Yüksek rakımlarda en iyi performansı sergiler.</p>
+                        <p><span class="font-semibold text-primary">Lezzet Profili:</span> Çiçeksi (yasemin, bergamot), tropik meyveler, bal, narin gövde</p>
+                    </div>
+                    
+                    <div class="variety-card">
+                        <div class="flex items-center mb-2">
+                            <div class="w-2 h-10 bg-amber-600 mr-3 rounded-full"></div>
+                            <h3 class="font-bold text-lg text-primary">Heirloom (Etiyopya)</h3>
+                        </div>
+                        <p class="mb-2">"Heirloom" tek bir varyete değil, Etiyopya'da yetişen binlerce yerel varyeteyi tanımlamak için kullanılan genel bir terimdir.</p>
+                        <p><span class="font-semibold text-primary">Lezzet Profili:</span> Çiçeksi, meyvemsi, çay benzeri, karmaşık ve çok yönlü</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Altitude -->
+        <section class="wiki-card">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="text-2xl font-bold">Rakımın Kahve Üzerindeki Etkisi</h2>
+                <i class="fas fa-chevron-down icon-rotate"></i>
+            </div>
+            <div class="section-content">
+                <p class="mb-6">Kahvenin yetiştiği rakım, çekirdeğin gelişimini, sertliğini ve lezzet profilini doğrudan etkiler. Genel olarak, daha yüksek rakımda yetişen kahveler daha yavaş olgunlaşır, bu da daha yoğun ve karmaşık aromalar geliştirir.</p>
+                
+                <div class="space-y-6">
+                    <div class="altitude-card low-altitude shadow">
+                        <h3 class="font-bold text-lg mb-2">Düşük Rakım (800-1200m)</h3>
+                        <p class="mb-2">Düşük rakımlarda yetişen kahveler genellikle daha hızlı olgunlaşır ve daha yumuşak lezzet profillerine sahiptir.</p>
+                        <p><span class="font-semibold">Lezzet Karakteri:</span> Düşük asidite, dolgun gövde, fındık ve çikolata notaları, yumuşak</p>
+                    </div>
+                    
+                    <div class="altitude-card medium-altitude shadow">
+                        <h3 class="font-bold text-lg mb-2">Orta Rakım (1200-1500m)</h3>
+                        <p class="mb-2">Orta rakımlar, dengeli kahveler üretir. Bu yüksekliklerde yetiştirilen kahveler, asidite ve gövde arasında iyi bir denge sunar.</p>
+                        <p><span class="font-semibold">Lezzet Karakteri:</span> Karamel tatlılığı, orta asidite, dengeli gövde, meyve notaları</p>
+                    </div>
+                    
+                    <div class="altitude-card high-altitude shadow">
+                        <h3 class="font-bold text-lg mb-2">Yüksek Rakım (1500-1800m)</h3>
+                        <p class="mb-2">Yüksek rakımlarda, kahve çekirdekleri daha yavaş gelişir ve daha yoğun lezzet profilleri oluşturur.</p>
+                        <p><span class="font-semibold">Lezzet Karakteri:</span> Belirgin asidite, karmaşık aromalar, meyve ve çiçek notaları</p>
+                    </div>
+                    
+                    <div class="altitude-card very-high-altitude shadow">
+                        <h3 class="font-bold text-lg mb-2">Çok Yüksek Rakım (1800m+)</h3>
+                        <p class="mb-2">En yüksek rakımlarda yetişen kahveler, en karmaşık ve aromatik profillere sahip olma eğilimindedir.</p>
+                        <p><span class="font-semibold">Lezzet Karakteri:</span> Yoğun asidite, zengin aromalar, parlak meyve notaları, çiçeksi özellikler</p>
+                    </div>
+                </div>
+                
+                <p class="mt-6 text-sm italic">Not: Rakım değerleri genel olarak belirtilmiştir ve çeşitli faktörlere göre değişebilir. Aynı rakımda yetiştirilen kahveler, farklı bölgelerde tamamen farklı karakterlere sahip olabilir.</p>
+            </div>
+        </section>
+
+        <!-- Processing Methods -->
+        <section class="wiki-card">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="text-2xl font-bold">Kahve İşleme Yöntemleri</h2>
+                <i class="fas fa-chevron-down icon-rotate"></i>
+            </div>
+            <div class="section-content">
+                <p class="mb-6">Hasat edilen kahve kirazlarının çekirdeğe dönüştürülme süreci, kahvenin lezzet profilini doğrudan etkiler. İşte en yaygın ve yenilikçi işleme yöntemleri:</p>
+                
+                <div class="space-y-6">
+                    <div class="processing-card border-yellow-500 bg-yellow-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg text-yellow-700">Natural (Kuru) İşleme</h3>
+                        <p class="mb-2">En eski işleme yöntemidir. Kahve kirazları bütün olarak güneşte kurutulur. Meyve etinin çekirdekle uzun süre temas etmesi, şekerli ve meyvemsi notalar oluşturur.</p>
+                        <p><span class="font-semibold text-yellow-700">Lezzet Karakteri:</span> Yoğun meyve notaları, dolgun gövde, düşük asidite, tatlılık</p>
+                    </div>
+                    
+                    <div class="processing-card border-blue-500 bg-blue-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg text-blue-700">Washed (Yıkanmış) İşleme</h3>
+                        <p class="mb-2">Meyve eti fermente edilerek ve suyla yıkanarak tamamen çıkarılır. Bu işlem, çekirdeğin doğal karakterini ve orijin özelliklerini öne çıkarır.</p>
+                        <p><span class="font-semibold text-blue-700">Lezzet Karakteri:</span> Temiz fincan, parlak asidite, net meyve notaları, hafif-orta gövde</p>
+                    </div>
+                    
+                    <div class="processing-card border-red-500 bg-red-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg text-red-700">Honey (Bal) İşleme</h3>
+                        <p class="mb-2">Kirazların dış kabuğu çıkarılır ancak musilaj (yapışkan şekerli tabaka) çekirdek üzerinde bırakılarak kurutulur. Farklı miktarlarda musilaj bırakılmasına göre White, Yellow, Red, Black Honey olarak adlandırılır.</p>
+                        <p><span class="font-semibold text-red-700">Lezzet Karakteri:</span> Doğal ve yıkanmış arasında dengeli, yumuşak asidite, bal benzeri tatlılık</p>
+                    </div>
+                    
+                    <div class="processing-card border-purple-500 bg-purple-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg text-purple-700">Anaerobic Fermentation (Anaerobik Fermantasyon)</h3>
+                        <p class="mb-2">Kahve kirazları veya çekirdekleri oksijensiz bir ortamda fermente edilir. Bu yöntem, kontrollü fermantasyon yoluyla benzersiz lezzet profilleri yaratır.</p>
+                        <p><span class="font-semibold text-purple-700">Lezzet Karakteri:</span> Tropik meyveler, canlı asidite, karmaşık şarap benzeri notalar</p>
+                    </div>
+                    
+                    <div class="processing-card border-green-500 bg-green-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg text-green-700">Carbonic Maceration (Karbonik Maserasyon)</h3>
+                        <p class="mb-2">Şarap yapımından esinlenen bu yöntemde, kahve kirazları CO2 dolu tanklarda fermente edilir. Bu, karmaşık ve şarap benzeri profiller yaratır.</p>
+                        <p><span class="font-semibold text-green-700">Lezzet Karakteri:</span> Şarap benzeri asidite, yoğun meyve notaları, baharatlı dokunuşlar</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flavor Profiles -->
+        <section class="wiki-card">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="text-2xl font-bold">Kahve Lezzet Profilleri</h2>
+                <i class="fas fa-chevron-down icon-rotate"></i>
+            </div>
+            <div class="section-content">
+                <p class="mb-6">Kahve tadımında, fincanınızdaki aromalar ve tatlar genellikle aşağıdaki kategorilere ayrılır. Kahvenin tüm özelliklerini tanımlamak için bir lezzet tekerleği kullanılır.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="flavor-card bg-yellow-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2 text-yellow-700">Meyvemsi</h3>
+                        <div class="flex flex-wrap mb-3 gap-1">
+                            <span class="coffee-tag">Kuşüzümü</span>
+                            <span class="coffee-tag">Böğürtlen</span>
+                            <span class="coffee-tag">Çilek</span>
+                            <span class="coffee-tag">Elma</span>
+                            <span class="coffee-tag">Portakal</span>
+                            <span class="coffee-tag">Greyfurt</span>
+                            <span class="coffee-tag">Ananas</span>
+                        </div>
+                        <p class="text-sm italic">Genellikle: Yüksek rakım, Etiyopya, Kenya, yıkanmış işleme</p>
+                    </div>
+                    
+                    <div class="flavor-card bg-red-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2 text-red-700">Çiçeksi</h3>
+                        <div class="flex flex-wrap mb-3 gap-1">
+                            <span class="coffee-tag">Yasemin</span>
+                            <span class="coffee-tag">Gül</span>
+                            <span class="coffee-tag">Lavanta</span>
+                            <span class="coffee-tag">Bergamot</span>
+                            <span class="coffee-tag">Portakal Çiçeği</span>
+                            <span class="coffee-tag">Ihlamur</span>
+                        </div>
+                        <p class="text-sm italic">Genellikle: Etiyopya, Gesha varyetesi, yüksek rakım</p>
+                    </div>
+                    
+                    <div class="flavor-card bg-green-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2 text-green-700">Çay Benzeri</h3>
+                        <div class="flex flex-wrap mb-3 gap-1">
+                            <span class="coffee-tag">Siyah Çay</span>
+                            <span class="coffee-tag">Yeşil Çay</span>
+                            <span class="coffee-tag">Beyaz Çay</span>
+                            <span class="coffee-tag">Bergamot</span>
+                        </div>
+                        <p class="text-sm italic">Genellikle: Etiyopya, Kenya, yüksek rakım</p>
+                    </div>
+                    
+                    <div class="flavor-card bg-amber-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2 text-amber-700">Tatlılar</h3>
+                        <div class="flex flex-wrap mb-3 gap-1">
+                            <span class="coffee-tag">Çikolata</span>
+                            <span class="coffee-tag">Karamel</span>
+                            <span class="coffee-tag">Bal</span>
+                            <span class="coffee-tag">Şurup</span>
+                            <span class="coffee-tag">Vanilya</span>
+                            <span class="coffee-tag">Fındık</span>
+                            <span class="coffee-tag">Badem</span>
+                        </div>
+                        <p class="text-sm italic">Genellikle: Brezilya, Kolombiya, Guatemala, orta ve düşük rakım</p>
+                    </div>
+                    
+                    <div class="flavor-card bg-indigo-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2 text-indigo-700">Baharatlı</h3>
+                        <div class="flex flex-wrap mb-3 gap-1">
+                            <span class="coffee-tag">Tarçın</span>
+                            <span class="coffee-tag">Karabiber</span>
+                            <span class="coffee-tag">Karanfil</span>
+                            <span class="coffee-tag">Kakule</span>
+                            <span class="coffee-tag">Muskat</span>
+                            <span class="coffee-tag">Zencefil</span>
+                        </div>
+                        <p class="text-sm italic">Genellikle: Guatemala, Sumatra, Etiyopya, koyu kavrulmuş</p>
+                    </div>
+                    
+                    <div class="flavor-card bg-gray-50 rounded-lg shadow">
+                        <h3 class="font-bold text-lg mb-2 text-gray-700">Tahıllı/Topraklı</h3>
+                        <div class="flex flex-wrap mb-3 gap-1">
+                            <span class="coffee-tag">Tahıl</span>
+                            <span class="coffee-tag">Ekmek</span>
+                            <span class="coffee-tag">Malt</span>
+                            <span class="coffee-tag">Tütün</span>
+                            <span class="coffee-tag">Deri</span>
+                            <span class="coffee-tag">Odun</span>
+                        </div>
+                        <p class="text-sm italic">Genellikle: Sumatra, Endonezya, orta-koyu kavrum</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold mb-2">Tetra N Roastery</h3>
+                <p class="text-xl italic">from ankara with love</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            
+            const icon = header.querySelector('.icon-rotate');
+            icon.classList.toggle('rotate-icon');
+        }
+        
+        // Set initial state (only first section open)
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section-content');
+            const icons = document.querySelectorAll('.icon-rotate');
+            
+            for (let i = 1; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+                icons[i].classList.remove('rotate-icon');
+            }
+        });
+    </script>
+</body>
+</html>
