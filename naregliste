@@ -8,13 +8,13 @@ xmlns="http://www.w3.org/TR/REC-html40">
 <meta http-equiv=Content-Type content="text/html; charset=Windows-1254">
 <meta name=ProgId content=Excel.Sheet>
 <meta name=Generator content="Microsoft Excel 15">
-<link rel=File-List href="Şurup,_püre,_toz_ürün,_sos_dosyalar/filelist.xml">
+<link rel=File-List href="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/filelist.xml">
 <![if !supportTabStrip]>
-<link id="shLink" href="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet001.htm">
-<link id="shLink" href="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet002.htm">
-<link id="shLink" href="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet003.htm">
-<link id="shLink" href="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet004.htm">
-<link id="shLink" href="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet005.htm">
+<link id="shLink" href="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet001.htm">
+<link id="shLink" href="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet002.htm">
+<link id="shLink" href="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet003.htm">
+<link id="shLink" href="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet004.htm">
+<link id="shLink" href="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet005.htm">
 
 <link id="shLink">
 
@@ -23,10 +23,10 @@ xmlns="http://www.w3.org/TR/REC-html40">
  var c_lTabs=5;
 
  var c_rgszSh=new Array(c_lTabs);
- c_rgszSh[0] = "TOZ GRUBU";
- c_rgszSh[1] = "ÇAYLAR";
- c_rgszSh[2] = "ŞURUPLAR";
- c_rgszSh[3] = "PÜRELER";
+ c_rgszSh[0] = "TOZÂ GRUBU";
+ c_rgszSh[1] = "Ã‡AYLAR";
+ c_rgszSh[2] = "ÃURUPLAR";
+ c_rgszSh[3] = "PÃœRELER";
  c_rgszSh[4] = "SOSLAR";
 
 
@@ -306,26 +306,26 @@ function fnSetActiveSheet(iSh)
   <x:ExcelWorksheets>
    <x:ExcelWorksheet>
     <x:Name>TOZ GRUBU</x:Name>
-    <x:WorksheetSource HRef="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet001.htm"/>
+    <x:WorksheetSource HRef="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet001.htm"/>
    </x:ExcelWorksheet>
    <x:ExcelWorksheet>
-    <x:Name>ÇAYLAR</x:Name>
-    <x:WorksheetSource HRef="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet002.htm"/>
+    <x:Name>Ã‡AYLAR</x:Name>
+    <x:WorksheetSource HRef="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet002.htm"/>
    </x:ExcelWorksheet>
    <x:ExcelWorksheet>
-    <x:Name>ŞURUPLAR</x:Name>
-    <x:WorksheetSource HRef="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet003.htm"/>
+    <x:Name>ÃURUPLAR</x:Name>
+    <x:WorksheetSource HRef="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet003.htm"/>
    </x:ExcelWorksheet>
    <x:ExcelWorksheet>
-    <x:Name>PÜRELER</x:Name>
-    <x:WorksheetSource HRef="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet004.htm"/>
+    <x:Name>PÃœRELER</x:Name>
+    <x:WorksheetSource HRef="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet004.htm"/>
    </x:ExcelWorksheet>
    <x:ExcelWorksheet>
     <x:Name>SOSLAR</x:Name>
-    <x:WorksheetSource HRef="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet005.htm"/>
+    <x:WorksheetSource HRef="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet005.htm"/>
    </x:ExcelWorksheet>
   </x:ExcelWorksheets>
-  <x:Stylesheet HRef="Şurup,_püre,_toz_ürün,_sos_dosyalar/stylesheet.css"/>
+  <x:Stylesheet HRef="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/stylesheet.css"/>
   <x:WindowHeight>12456</x:WindowHeight>
   <x:WindowWidth>23256</x:WindowWidth>
   <x:WindowTopX>32767</x:WindowTopX>
@@ -337,11 +337,11 @@ function fnSetActiveSheet(iSh)
 </head>
 
 <frameset rows="*,39" border=0 width=0 frameborder=no framespacing=0>
- <frame src="Şurup,_püre,_toz_ürün,_sos_dosyalar/sheet001.htm" name="frSheet">
- <frame src="Şurup,_püre,_toz_ürün,_sos_dosyalar/tabstrip.htm" name="frTabs" marginwidth=0 marginheight=0>
+ <frame src="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/sheet001.htm" name="frSheet">
+ <frame src="Ãurup,_pÃ¼re,_toz_Ã¼rÃ¼n,_sos_dosyalar/tabstrip.htm" name="frTabs" marginwidth=0 marginheight=0>
  <noframes>
   <body>
-   <p>Bu sayfa çerçeveler kullanıyor ancak tarayıcınız çerçeveleri desteklemiyor.</p>
+   <p>Bu sayfa Ã§erÃ§eveler kullanÃ½yor ancak tarayÃ½cÃ½nÃ½z Ã§erÃ§eveleri desteklemiyor.</p>
   </body>
  </noframes>
 </frameset>
