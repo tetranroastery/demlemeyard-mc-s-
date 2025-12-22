@@ -180,7 +180,7 @@
             position: relative;
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: flex-end; /* Fincan tabana yaslı */
         }
 
         /* The Mug */
@@ -191,24 +191,24 @@
             border: 2px solid #ddd;
             border-radius: 10px 10px 60px 60px;
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* İçerik taşmasın diye */
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             transition: height 0.5s ease;
-            z-index: 2;
+            z-index: 2; /* Kulpun önünde dursun */
         }
 
         /* Handle */
         .handle {
             position: absolute;
-            right: 0px;
-            top: 110px;
+            right: 17px; /* Container ortasındaki 160px fincana yapışması için */
+            bottom: 50px; /* JS ile güncellenecek */
             width: 40px;
             height: 60px;
             border: 4px solid #ddd;
             border-left: none;
             border-radius: 0 25px 25px 0;
-            z-index: 1;
-            transition: top 0.5s ease;
+            z-index: 1; /* Fincanın arkasında */
+            transition: bottom 0.5s ease;
         }
 
         /* Layers */
@@ -278,8 +278,9 @@
             .cup {
                 width: 140px;
             }
+            /* Mobilde fincan genişliği 140px olunca hizalama değişmeli */
             .handle {
-                right: 10px; /* Adjust based on container width */
+                right: calc(50% - 70px - 40px + 2px); /* Ortadan fincan yarısı kadar sağa git */
             }
         }
 
@@ -322,8 +323,6 @@
                 <div class="cup-container">
                     <div class="handle" id="cupHandle"></div>
                     <div class="cup" id="mainCup">
-                        <!-- Layers are stacked bottom to top visually using position absolute bottom:0, 
-                             but we control their 'height' property and 'bottom' offset via JS -->
                         <div class="layer layer-foam" id="foamLayer"><span class="layer-text">Köpük</span></div>
                         <div class="layer layer-milk" id="milkLayer"><span class="layer-text">Süt</span></div>
                         <div class="layer layer-water" id="waterLayer"><span class="layer-text">Su</span></div>
@@ -346,7 +345,7 @@
                 story: "Kahvenin kalbi. Yoğun, aromatik ve kısa. Tetra N Roastery'de her şey bu 9 barlık basınç hikayesiyle başlar.",
                 recipe: ["18g Öğütülmüş Kahve", "36-40g Çıktı (Double Shot)", "Süre: 25-30 Saniye", "Krema: Altın rengi ve bütüncül"],
                 cupHeight: "80px",
-                layers: { espresso: "40%", water: "0%", milk: "0%", foam: "10%" } // Foam is crema here
+                layers: { espresso: "40%", water: "0%", milk: "0%", foam: "10%" } 
             },
             ristretto: {
                 title: "Ristretto",
@@ -360,7 +359,7 @@
                 story: "Espresso'nun yumuşatılmış hali. Fincanınızda uzun soluklu bir keyif.",
                 recipe: ["1 Shot Espresso (36-40g)", "120ml Sıcak Su", "Önce su, üzerine espresso (Krema bozulmasın diye)"],
                 cupHeight: "180px",
-                layers: { espresso: "20%", water: "70%", milk: "0%", foam: "5%" } // Foam represents thin crema
+                layers: { espresso: "20%", water: "70%", milk: "0%", foam: "5%" } 
             },
             macchiato: {
                 title: "Espresso Macchiato",
@@ -402,7 +401,7 @@
                 story: "Çikolata ve kahvenin aşkı. Latte'nin tatlı ve şımarık kardeşi.",
                 recipe: ["Double Shot Espresso", "15g Bitter Çikolata Sosu", "150ml Süt", "Krema Eklenebilir"],
                 cupHeight: "200px",
-                layers: { espresso: "15%", water: "0%", milk: "70%", foam: "15%" } // Combining choc into milk visual for simplicity, or could add layer
+                layers: { espresso: "15%", water: "0%", milk: "70%", foam: "15%" } 
             }
         };
 
@@ -450,45 +449,30 @@
             // Cup Animation
             mainCup.style.height = data.cupHeight;
             
-            // Handle Position (Visual trick to keep handle proportional)
-            // Parse height to number
-            const heightNum = parseInt(data.cupHeight);
-            cupHandle.style.top = (heightNum / 2) + 20 + "px"; // Adjust handle roughly to center
+            // Handle Position Adjustment (Centered Vertically based on Cup Height)
+            // Handle height is 60px.
+            const cupHeightVal = parseInt(data.cupHeight);
+            const handleHeight = 60;
+            // Formula to center handle: (CupHeight / 2) - (HandleHeight / 2)
+            const bottomOffset = (cupHeightVal / 2) - (handleHeight / 2);
+            cupHandle.style.bottom = bottomOffset + "px";
 
             // Layer Animation logic
-            // We stack them using bottom offset based on previous layer heights
-            // Since CSS transitions handles the visual change, we just need to set heights.
-            // But to stack them, we need to know the order.
-            // Order from bottom: Espresso -> Water -> Milk -> Foam
-            
-            // NOTE: For CSS simplicity in this demo, layers are absolute bottom:0. 
-            // We need to stack them using `bottom` property.
-            
-            // Helper to get pixel value or percent value from the object
-            // Let's assume the percentages are relative to the CUP HEIGHT.
-            
             lEspresso.style.height = data.layers.espresso;
             lEspresso.style.bottom = "0";
 
-            // Water sits on top of Espresso
             lWater.style.height = data.layers.water;
             lWater.style.bottom = data.layers.espresso;
 
-            // Milk sits on top of Water (or Espresso if Water is 0)
-            // Calculation needed for 'bottom' if using percentages strings like "30%"
-            // Since CSS calc works, we can chain them.
-            
-            // If water is 0%, bottom is espresso. If water exists, bottom is espresso + water.
             lMilk.style.height = data.layers.milk;
             lMilk.style.bottom = `calc(${data.layers.espresso} + ${data.layers.water})`;
 
-            // Foam sits on top of Milk
             lFoam.style.height = data.layers.foam;
             lFoam.style.bottom = `calc(${data.layers.espresso} + ${data.layers.water} + ${data.layers.milk})`;
             
-            // Mocha special color change for milk layer (optional detail)
+            // Mocha detail
             if(drinkKey === 'mocha') {
-                lMilk.style.backgroundColor = '#6d4c41'; // Chocolate milk color
+                lMilk.style.backgroundColor = '#6d4c41'; 
                 lMilk.querySelector('span').innerText = "Çikolatalı Süt";
             } else {
                 lMilk.style.backgroundColor = '#fcfcfc';
