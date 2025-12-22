@@ -19,44 +19,46 @@
 
         body {
             font-family: 'Raleway', sans-serif;
-            background-color: var(--tetra-cream);
+            background-color: transparent; /* Arka planı sitenize uyumlu olsun diye şeffaf yaptım */
             color: var(--tetra-dark);
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            padding: 0; /* Boşlukları kaldırdık */
+            display: block; /* Flex yapısını kaldırdık, akışına bıraktık */
+            width: 100%;
+            height: auto;
+            overflow-x: hidden; /* Yatay kaydırmayı engelle */
         }
 
         .guide-container {
             background: #fff;
             width: 100%;
-            max-width: 1000px;
+            max-width: 100%; /* Sınırı kaldırdık, parent neyse o olsun */
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Gölgeyi hafiflettik */
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            border: 1px solid #eee; /* Hafif çerçeve */
+            box-sizing: border-box; /* Padding taşmasını engelle */
         }
 
         /* Header */
         .guide-header {
             text-align: center;
-            padding: 30px 20px;
+            padding: 20px 15px;
             background-color: var(--tetra-dark);
             color: #fff;
         }
 
         .guide-header h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin: 0;
             font-weight: 400;
         }
 
         .guide-header span {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--tetra-accent);
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -68,8 +70,8 @@
         .guide-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            padding: 40px;
+            gap: 30px;
+            padding: 30px 20px;
         }
 
         /* Left: Menu & Info */
@@ -82,19 +84,22 @@
         .drink-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .drink-btn {
             background: none;
             border: 1px solid #ddd;
-            padding: 10px 18px;
-            border-radius: 25px;
+            padding: 8px 14px;
+            border-radius: 20px;
             cursor: pointer;
             font-family: 'Raleway', sans-serif;
             font-weight: 600;
+            font-size: 0.9rem;
             color: var(--tetra-dark);
             transition: all 0.3s ease;
+            flex-grow: 1; /* Butonlar alanı doldursun */
+            text-align: center;
         }
 
         .drink-btn:hover {
@@ -109,34 +114,35 @@
         }
 
         .info-card {
-            margin-top: 20px;
+            margin-top: 10px;
             animation: fadeIn 0.5s ease;
         }
 
         .info-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
             color: var(--tetra-dark);
         }
 
         .info-desc {
-            line-height: 1.6;
+            line-height: 1.5;
             color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-style: italic;
+            font-size: 0.95rem;
         }
 
         .recipe-box {
             background-color: var(--tetra-cream);
-            padding: 20px;
+            padding: 15px;
             border-left: 4px solid var(--tetra-accent);
             border-radius: 4px;
         }
 
         .recipe-box h4 {
-            margin: 0 0 10px 0;
-            font-size: 0.9rem;
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -145,11 +151,11 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .recipe-list li {
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
         }
@@ -172,6 +178,7 @@
             border-radius: 12px;
             padding: 20px;
             position: relative;
+            min-height: 300px; /* Iframe içinde çökmesin diye min yükseklik */
         }
 
         .cup-container {
@@ -180,38 +187,35 @@
             position: relative;
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* Fincan tabana yaslı */
+            align-items: flex-end; 
         }
 
-        /* The Mug */
         .cup {
             width: 160px;
-            height: 150px; /* Default height */
-            background: rgba(255,255,255,0.9);
+            height: 150px; 
+            background: rgba(255,255,255,0.95);
             border: 2px solid #ddd;
             border-radius: 10px 10px 60px 60px;
             position: relative;
-            overflow: hidden; /* İçerik taşmasın diye */
+            overflow: hidden; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             transition: height 0.5s ease;
-            z-index: 2; /* Kulpun önünde dursun */
+            z-index: 2; 
         }
 
-        /* Handle */
         .handle {
             position: absolute;
-            right: 17px; /* Container ortasındaki 160px fincana yapışması için */
-            bottom: 50px; /* JS ile güncellenecek */
+            right: 17px; 
+            bottom: 50px; 
             width: 40px;
             height: 60px;
             border: 4px solid #ddd;
             border-left: none;
             border-radius: 0 25px 25px 0;
-            z-index: 1; /* Fincanın arkasında */
+            z-index: 1; 
             transition: bottom 0.5s ease;
         }
 
-        /* Layers */
         .layer {
             width: 100%;
             position: absolute;
@@ -220,26 +224,10 @@
             transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.5s;
         }
 
-        .layer-espresso {
-            background-color: var(--coffee-color);
-            z-index: 10;
-        }
-        
-        .layer-water {
-            background-color: var(--water-color);
-            z-index: 9;
-            opacity: 0.7;
-        }
-
-        .layer-milk {
-            background-color: var(--milk-color);
-            z-index: 20;
-        }
-
-        .layer-foam {
-            background-color: var(--foam-color);
-            z-index: 30;
-        }
+        .layer-espresso { background-color: var(--coffee-color); z-index: 10; }
+        .layer-water { background-color: var(--water-color); z-index: 9; opacity: 0.7; }
+        .layer-milk { background-color: var(--milk-color); z-index: 20; }
+        .layer-foam { background-color: var(--foam-color); z-index: 30; }
         
         .layer-text {
             position: absolute;
@@ -254,33 +242,32 @@
             transition: opacity 0.5s 0.3s;
         }
         
-        .layer:hover .layer-text {
-            opacity: 1;
-        }
+        .layer:hover .layer-text { opacity: 1; }
 
-        /* Footer Note */
         .guide-footer {
-            padding: 20px;
+            padding: 15px;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #999;
             border-top: 1px solid #eee;
+            background: #fff;
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
+        /* Embed için özel responsive ayarı
+           Normalde 768px'de kırılırdı, ama iframe dar olabilir.
+           O yüzden 900px altına inince tek sütuna düşürdük.
+        */
+        @media (max-width: 900px) {
             .guide-content {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Tek sütun */
+                gap: 20px;
+            }
+            .visual-section {
+                order: -1; /* Görseli üste al */
+                min-height: 250px;
             }
             .cup-container {
-                height: 200px;
-            }
-            .cup {
-                width: 140px;
-            }
-            /* Mobilde fincan genişliği 140px olunca hizalama değişmeli */
-            .handle {
-                right: calc(50% - 70px - 40px + 2px); /* Ortadan fincan yarısı kadar sağa git */
+                transform: scale(0.9); /* Biraz küçült mobilde */
             }
         }
 
@@ -338,7 +325,6 @@
     </div>
 
     <script>
-        // Data from Tetra N Roastery Handbook
         const drinks = {
             espresso: {
                 title: "Espresso",
@@ -412,13 +398,11 @@
         const mainCup = document.getElementById('mainCup');
         const cupHandle = document.getElementById('cupHandle');
         
-        // Layers
         const lEspresso = document.getElementById('espressoLayer');
         const lWater = document.getElementById('waterLayer');
         const lMilk = document.getElementById('milkLayer');
         const lFoam = document.getElementById('foamLayer');
 
-        // Initialize Buttons
         Object.keys(drinks).forEach(key => {
             const btn = document.createElement('button');
             btn.className = 'drink-btn';
@@ -429,12 +413,8 @@
 
         function loadDrink(drinkKey) {
             const data = drinks[drinkKey];
-            
-            // Text Update
             drinkTitle.innerText = data.title;
             drinkStory.innerText = data.story;
-            
-            // Recipe List Update
             drinkRecipe.innerHTML = '';
             data.recipe.forEach(item => {
                 const li = document.createElement('li');
@@ -442,22 +422,16 @@
                 drinkRecipe.appendChild(li);
             });
 
-            // Active Button State
             document.querySelectorAll('.drink-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
 
-            // Cup Animation
             mainCup.style.height = data.cupHeight;
             
-            // Handle Position Adjustment (Centered Vertically based on Cup Height)
-            // Handle height is 60px.
             const cupHeightVal = parseInt(data.cupHeight);
             const handleHeight = 60;
-            // Formula to center handle: (CupHeight / 2) - (HandleHeight / 2)
             const bottomOffset = (cupHeightVal / 2) - (handleHeight / 2);
             cupHandle.style.bottom = bottomOffset + "px";
 
-            // Layer Animation logic
             lEspresso.style.height = data.layers.espresso;
             lEspresso.style.bottom = "0";
 
@@ -470,7 +444,6 @@
             lFoam.style.height = data.layers.foam;
             lFoam.style.bottom = `calc(${data.layers.espresso} + ${data.layers.water} + ${data.layers.milk})`;
             
-            // Mocha detail
             if(drinkKey === 'mocha') {
                 lMilk.style.backgroundColor = '#6d4c41'; 
                 lMilk.querySelector('span').innerText = "Çikolatalı Süt";
@@ -480,9 +453,14 @@
             }
         }
 
-        // Load default
         document.querySelector('.drink-btn').click();
 
+        // Eğer Ikas iframe içinde resize mesajını destekliyorsa, bu betik yüksekliği parent'a bildirir.
+        window.addEventListener('load', function() {
+            const height = document.body.scrollHeight;
+            window.parent.postMessage({ height: height }, '*');
+        });
+        
     </script>
 </body>
 </html>
