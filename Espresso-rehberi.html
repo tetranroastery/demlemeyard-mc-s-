@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra N Roastery - İnteraktif Espresso Rehberi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;600&display=swap');
+
+        :root {
+            --tetra-dark: #2c241b; /* Koyu Kahve */
+            --tetra-accent: #c05c42; /* Kiremit/Logo Rengi */
+            --tetra-cream: #f4efe9; /* Krem Arka Plan */
+            --coffee-color: #3b2f2f;
+            --milk-color: #fcfcfc;
+            --foam-color: #e6e0d4;
+            --water-color: #a4c8e1;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--tetra-cream);
+            color: var(--tetra-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .guide-container {
+            background: #fff;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .guide-header {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: var(--tetra-dark);
+            color: #fff;
+        }
+
+        .guide-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .guide-header span {
+            font-size: 0.9rem;
+            color: var(--tetra-accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Main Content Grid */
+        .guide-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        /* Left: Menu & Info */
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .drink-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .drink-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            color: var(--tetra-dark);
+            transition: all 0.3s ease;
+        }
+
+        .drink-btn:hover {
+            border-color: var(--tetra-accent);
+            color: var(--tetra-accent);
+        }
+
+        .drink-btn.active {
+            background-color: var(--tetra-accent);
+            color: #fff;
+            border-color: var(--tetra-accent);
+        }
+
+        .info-card {
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .info-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--tetra-dark);
+        }
+
+        .info-desc {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .recipe-box {
+            background-color: var(--tetra-cream);
+            padding: 20px;
+            border-left: 4px solid var(--tetra-accent);
+            border-radius: 4px;
+        }
+
+        .recipe-box h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .recipe-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .recipe-list li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .recipe-list li::before {
+            content: "•";
+            color: var(--tetra-accent);
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        /* Right: Visual Cup */
+        .visual-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fafafa;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .cup-container {
+            width: 200px;
+            height: 240px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        /* The Mug */
+        .cup {
+            width: 160px;
+            height: 150px; /* Default height */
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #ddd;
+            border-radius: 10px 10px 60px 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: height 0.5s ease;
+            z-index: 2;
+        }
+
+        /* Handle */
+        .handle {
+            position: absolute;
+            right: 0px;
+            top: 110px;
+            width: 40px;
+            height: 60px;
+            border: 4px solid #ddd;
+            border-left: none;
+            border-radius: 0 25px 25px 0;
+            z-index: 1;
+            transition: top 0.5s ease;
+        }
+
+        /* Layers */
+        .layer {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.5s;
+        }
+
+        .layer-espresso {
+            background-color: var(--coffee-color);
+            z-index: 10;
+        }
+        
+        .layer-water {
+            background-color: var(--water-color);
+            z-index: 9;
+            opacity: 0.7;
+        }
+
+        .layer-milk {
+            background-color: var(--milk-color);
+            z-index: 20;
+        }
+
+        .layer-foam {
+            background-color: var(--foam-color);
+            z-index: 30;
+        }
+        
+        .layer-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s 0.3s;
+        }
+        
+        .layer:hover .layer-text {
+            opacity: 1;
+        }
+
+        /* Footer Note */
+        .guide-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #999;
+            border-top: 1px solid #eee;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .guide-content {
+                grid-template-columns: 1fr;
+            }
+            .cup-container {
+                height: 200px;
+            }
+            .cup {
+                width: 140px;
+            }
+            .handle {
+                right: 10px; /* Adjust based on container width */
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="guide-container">
+        <header class="guide-header">
+            <span>Tetra N Roastery</span>
+            <h2>Her Kahve Bir Hikaye Anlatır</h2>
+        </header>
+
+        <div class="guide-content">
+            <!-- Left Side -->
+            <section class="menu-section">
+                <div class="drink-buttons" id="drinkMenu">
+                    <!-- Buttons will be injected by JS -->
+                </div>
+
+                <div class="info-card">
+                    <h3 class="info-title" id="drinkTitle">Espresso</h3>
+                    <p class="info-desc" id="drinkStory">Kahvenin en saf hali. Basınç, sıcaklık ve zamanın kusursuz dansı.</p>
+                    <div class="recipe-box">
+                        <h4>Barista Notları</h4>
+                        <ul class="recipe-list" id="drinkRecipe">
+                            <li>18-20g Kahve</li>
+                            <li>40g Çıktı</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Side (Visual) -->
+            <section class="visual-section">
+                <div class="cup-container">
+                    <div class="handle" id="cupHandle"></div>
+                    <div class="cup" id="mainCup">
+                        <!-- Layers are stacked bottom to top visually using position absolute bottom:0, 
+                             but we control their 'height' property and 'bottom' offset via JS -->
+                        <div class="layer layer-foam" id="foamLayer"><span class="layer-text">Köpük</span></div>
+                        <div class="layer layer-milk" id="milkLayer"><span class="layer-text">Süt</span></div>
+                        <div class="layer layer-water" id="waterLayer"><span class="layer-text">Su</span></div>
+                        <div class="layer layer-espresso" id="espressoLayer"><span class="layer-text">Espresso</span></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="guide-footer">
+            * Oranlar Tetra N Roastery Handbook standartlarına göre hazırlanmıştır. Her çekirdeğin hikayesi, reçetede ufak dokunuşlar gerektirebilir.
+        </footer>
+    </div>
+
+    <script>
+        // Data from Tetra N Roastery Handbook
+        const drinks = {
+            espresso: {
+                title: "Espresso",
+                story: "Kahvenin kalbi. Yoğun, aromatik ve kısa. Tetra N Roastery'de her şey bu 9 barlık basınç hikayesiyle başlar.",
+                recipe: ["18g Öğütülmüş Kahve", "36-40g Çıktı (Double Shot)", "Süre: 25-30 Saniye", "Krema: Altın rengi ve bütüncül"],
+                cupHeight: "80px",
+                layers: { espresso: "40%", water: "0%", milk: "0%", foam: "10%" } // Foam is crema here
+            },
+            ristretto: {
+                title: "Ristretto",
+                story: "Espresso'nun özü. Daha az su, daha yoğun aroma, daha az acılık. Çekirdeğin en tatlı anı.",
+                recipe: ["1:1 veya 1:1.5 Oranı", "18g Kahve -> 25-30g Çıktı", "Asidite daha belirgin", "Gövde daha yoğun"],
+                cupHeight: "60px",
+                layers: { espresso: "30%", water: "0%", milk: "0%", foam: "10%" }
+            },
+            americano: {
+                title: "Americano",
+                story: "Espresso'nun yumuşatılmış hali. Fincanınızda uzun soluklu bir keyif.",
+                recipe: ["1 Shot Espresso (36-40g)", "120ml Sıcak Su", "Önce su, üzerine espresso (Krema bozulmasın diye)"],
+                cupHeight: "180px",
+                layers: { espresso: "20%", water: "70%", milk: "0%", foam: "5%" } // Foam represents thin crema
+            },
+            macchiato: {
+                title: "Espresso Macchiato",
+                story: "'Lekelenmiş' kahve. Espresso'nun gücünü kaybetmeden, süt köpüğünün yumuşak dokunuşunu hissetmek isteyenler için.",
+                recipe: ["1 Espresso", "1 Çay Kaşığı Süt Köpüğü", "Yoğun kahve tadı"],
+                cupHeight: "90px",
+                layers: { espresso: "40%", water: "0%", milk: "5%", foam: "15%" }
+            },
+            cortado: {
+                title: "Cortado",
+                story: "İspanyol dengesi. Ne süt kahveyi örter, ne kahve sütü bastırır. Tam bir eşitlik hikayesi.",
+                recipe: ["1:1 Oran", "40ml Espresso", "40ml Krema Kıvamında Süt", "Daha küçük bardakta servis"],
+                cupHeight: "120px",
+                layers: { espresso: "45%", water: "0%", milk: "45%", foam: "5%" }
+            },
+            flatwhite: {
+                title: "Flat White",
+                story: "Avustralya'dan bir hediye. İncecik mikro köpük (microfoam) ile kadifemsi bir içim. Latte'den daha yoğun kahve tadı.",
+                recipe: ["Double Shot Espresso", "120ml Süt", "İnce Mikrofoam", "Latte Art ile sunum"],
+                cupHeight: "160px",
+                layers: { espresso: "25%", water: "0%", milk: "65%", foam: "5%" }
+            },
+            cappuccino: {
+                title: "Cappuccino",
+                story: "Klasik üçlü denge. Espresso, süt ve o meşhur kalın süt köpüğü. İtalyan sabahlarının vazgeçilmezi.",
+                recipe: ["1/3 Espresso", "1/3 Buharda Isıtılmış Süt", "1/3 Kalın Süt Köpüğü (Dry Foam)"],
+                cupHeight: "160px",
+                layers: { espresso: "30%", water: "0%", milk: "30%", foam: "35%" }
+            },
+            latte: {
+                title: "Caffè Latte",
+                story: "Sütün kucaklayıcı sıcaklığı. Kahve tadı hafifler, sütlü ve kremamsı doku ön plana çıkar.",
+                recipe: ["Single/Double Espresso", "180ml Buharda Isıtılmış Süt", "İnce Köpük Katmanı"],
+                cupHeight: "200px",
+                layers: { espresso: "15%", water: "0%", milk: "75%", foam: "10%" }
+            },
+            mocha: {
+                title: "Caffè Mocha",
+                story: "Çikolata ve kahvenin aşkı. Latte'nin tatlı ve şımarık kardeşi.",
+                recipe: ["Double Shot Espresso", "15g Bitter Çikolata Sosu", "150ml Süt", "Krema Eklenebilir"],
+                cupHeight: "200px",
+                layers: { espresso: "15%", water: "0%", milk: "70%", foam: "15%" } // Combining choc into milk visual for simplicity, or could add layer
+            }
+        };
+
+        const menuContainer = document.getElementById('drinkMenu');
+        const drinkTitle = document.getElementById('drinkTitle');
+        const drinkStory = document.getElementById('drinkStory');
+        const drinkRecipe = document.getElementById('drinkRecipe');
+        const mainCup = document.getElementById('mainCup');
+        const cupHandle = document.getElementById('cupHandle');
+        
+        // Layers
+        const lEspresso = document.getElementById('espressoLayer');
+        const lWater = document.getElementById('waterLayer');
+        const lMilk = document.getElementById('milkLayer');
+        const lFoam = document.getElementById('foamLayer');
+
+        // Initialize Buttons
+        Object.keys(drinks).forEach(key => {
+            const btn = document.createElement('button');
+            btn.className = 'drink-btn';
+            btn.innerText = drinks[key].title;
+            btn.onclick = () => loadDrink(key);
+            menuContainer.appendChild(btn);
+        });
+
+        function loadDrink(drinkKey) {
+            const data = drinks[drinkKey];
+            
+            // Text Update
+            drinkTitle.innerText = data.title;
+            drinkStory.innerText = data.story;
+            
+            // Recipe List Update
+            drinkRecipe.innerHTML = '';
+            data.recipe.forEach(item => {
+                const li = document.createElement('li');
+                li.innerText = item;
+                drinkRecipe.appendChild(li);
+            });
+
+            // Active Button State
+            document.querySelectorAll('.drink-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Cup Animation
+            mainCup.style.height = data.cupHeight;
+            
+            // Handle Position (Visual trick to keep handle proportional)
+            // Parse height to number
+            const heightNum = parseInt(data.cupHeight);
+            cupHandle.style.top = (heightNum / 2) + 20 + "px"; // Adjust handle roughly to center
+
+            // Layer Animation logic
+            // We stack them using bottom offset based on previous layer heights
+            // Since CSS transitions handles the visual change, we just need to set heights.
+            // But to stack them, we need to know the order.
+            // Order from bottom: Espresso -> Water -> Milk -> Foam
+            
+            // NOTE: For CSS simplicity in this demo, layers are absolute bottom:0. 
+            // We need to stack them using `bottom` property.
+            
+            // Helper to get pixel value or percent value from the object
+            // Let's assume the percentages are relative to the CUP HEIGHT.
+            
+            lEspresso.style.height = data.layers.espresso;
+            lEspresso.style.bottom = "0";
+
+            // Water sits on top of Espresso
+            lWater.style.height = data.layers.water;
+            lWater.style.bottom = data.layers.espresso;
+
+            // Milk sits on top of Water (or Espresso if Water is 0)
+            // Calculation needed for 'bottom' if using percentages strings like "30%"
+            // Since CSS calc works, we can chain them.
+            
+            // If water is 0%, bottom is espresso. If water exists, bottom is espresso + water.
+            lMilk.style.height = data.layers.milk;
+            lMilk.style.bottom = `calc(${data.layers.espresso} + ${data.layers.water})`;
+
+            // Foam sits on top of Milk
+            lFoam.style.height = data.layers.foam;
+            lFoam.style.bottom = `calc(${data.layers.espresso} + ${data.layers.water} + ${data.layers.milk})`;
+            
+            // Mocha special color change for milk layer (optional detail)
+            if(drinkKey === 'mocha') {
+                lMilk.style.backgroundColor = '#6d4c41'; // Chocolate milk color
+                lMilk.querySelector('span').innerText = "Çikolatalı Süt";
+            } else {
+                lMilk.style.backgroundColor = '#fcfcfc';
+                lMilk.querySelector('span').innerText = "Süt";
+            }
+        }
+
+        // Load default
+        document.querySelector('.drink-btn').click();
+
+    </script>
+</body>
+</html>
