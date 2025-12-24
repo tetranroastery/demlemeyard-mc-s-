@@ -1,0 +1,73 @@
+<div id="tn-blending-tool" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 100%; margin: 30px 0; padding: 25px; border-radius: 12px; background-color: #f8f8f8; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <h3 style="color: #333; margin-top: 0; text-align: center; margin-bottom: 20px;">💧 Kahve Suyu Harmanlama Hesaplayıcısı</h3>
+    <p style="font-size: 0.9em; color: #666; text-align: center; margin-bottom: 25px;">Sert ve yumuşak suyu karıştırarak ideal dengenizi bulun.</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+        <div style="flex: 1; min-width: 140px;">
+            <label style="display: block; font-weight: bold; font-size: 0.85em; color: #444; margin-bottom: 5px;">Sert Su (TDS ppm)</label>
+            <input type="number" id="hardWater" placeholder="Örn: 100" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+            <small style="color: #888;">Örn: Buzdağı</small>
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+            <label style="display: block; font-weight: bold; font-size: 0.85em; color: #444; margin-bottom: 5px;">Yumuşak Su (TDS ppm)</label>
+            <input type="number" id="softWater" placeholder="Örn: 30" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+            <small style="color: #888;">Örn: Abant</small>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: bold; font-size: 0.85em; color: #444; margin-bottom: 5px;">Hedeflenen TDS (ppm)</label>
+        <input type="number" id="targetTDS" placeholder="İdeal: 80-90" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+    </div>
+    
+    <div style="margin-bottom: 25px;">
+        <label style="display: block; font-weight: bold; font-size: 0.85em; color: #444; margin-bottom: 5px;">Toplam İstenen Su (ml)</label>
+        <input type="number" id="totalVolume" value="1000" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+    </div>
+
+    <button onclick="calculateBlend()" style="width: 100%; background-color: #000; color: #fff; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1em; transition: background 0.3s;">HESAPLA</button>
+
+    <div id="blendResult" style="margin-top: 20px; padding: 15px; background-color: #fff; border-radius: 8px; border-left: 5px solid #d4a017; display: none;">
+        <h4 style="margin: 0 0 10px 0; color: #333;">Sonuç Reçetesi:</h4>
+        <p style="margin: 5px 0; font-size: 1.1em;"><strong>Sert Su:</strong> <span id="resHard" style="color: #d4a017;">0</span> ml</p>
+        <p style="margin: 5px 0; font-size: 1.1em;"><strong>Yumuşak Su:</strong> <span id="resSoft" style="color: #007bff;">0</span> ml</p>
+    </div>
+    
+    <div id="blendError" style="margin-top: 15px; color: red; font-size: 0.9em; display: none; text-align: center;"></div>
+</div>
+
+<script>
+function calculateBlend() {
+    const hard = parseFloat(document.getElementById('hardWater').value);
+    const soft = parseFloat(document.getElementById('softWater').value);
+    const target = parseFloat(document.getElementById('targetTDS').value);
+    const total = parseFloat(document.getElementById('totalVolume').value);
+    const resultBox = document.getElementById('blendResult');
+    const errorBox = document.getElementById('blendError');
+
+    // Reset
+    resultBox.style.display = 'none';
+    errorBox.style.display = 'none';
+
+    if (!hard || !soft || !target || !total) {
+        errorBox.innerText = "Lütfen tüm alanları doldurunuz.";
+        errorBox.style.display = 'block';
+        return;
+    }
+
+    if (target > hard || target < soft) {
+        errorBox.innerText = "Hata: Hedeflenen TDS değeri, elinizdeki suların değerleri arasında olmalıdır.";
+        errorBox.style.display = 'block';
+        return;
+    }
+
+    // Pearson's Square Calculation
+    const ratioHard = (target - soft) / (hard - soft);
+    const amountHard = Math.round(total * ratioHard);
+    const amountSoft = total - amountHard;
+
+    document.getElementById('resHard').innerText = amountHard;
+    document.getElementById('resSoft').innerText = amountSoft;
+    resultBox.style.display = 'block';
+}
+</script>
