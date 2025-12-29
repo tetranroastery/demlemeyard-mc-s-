@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra N Roastery - 2025 Nasıl Geçti?</title>
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --accent: #d4a373; /* Kahve tonu */
+            --light: #fdfcf5;
+            --text: #333;
+            --gray: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .highlight {
+            color: var(--accent);
+        }
+
+        /* Header / Hero */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            color: white;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn Up 1s forwards;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            color: #ccc;
+            opacity: 0;
+            animation: fadeInUp 1s 0.5s forwards;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            color: var(--accent);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Intro Text */
+        .intro-text {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 60px auto;
+        }
+
+        /* Big Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--accent);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+        }
+
+        /* Favorites Section */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .coffee-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 30px;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .coffee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .coffee-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .tags span {
+            display: inline-block;
+            background: var(--light);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Map / City Battle */
+        .city-battle {
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            padding: 50px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .city {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+        }
+
+        .city h3 {
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .vs {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* City List Table Style */
+        .city-lists-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .city-list-box {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            min-width: 300px;
+        }
+
+        .city-list-box h3 {
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .city-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .city-row:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: var(--accent);
+            width: 30px;
+        }
+
+        .city-name {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+
+        .city-count {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Flavor Map Analysis */
+        .flavor-analysis {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .analysis-item {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar-bg {
+            background: #eee;
+            height: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--accent), #e6c299);
+            height: 100%;
+            width: 0;
+            border-radius: 10px;
+            transition: width 1.5s ease-out;
+        }
+
+        /* August Highlight */
+        .august-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: #4a4a4a;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            font-size: 0.9rem;
+        }
+        
+        footer .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: block;
+            color: var(--accent);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .city-battle { flex-direction: column; gap: 30px; }
+            .vs { transform: rotate(90deg); margin: 20px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>2025'te Fincanlarda<br><span class="highlight">Bıraktığımız İzler</span></h1>
+        <p>35 Ton Kahve, 125.000+ Hikaye ve Sayısız Mutluluk.</p>
+        <div class="scroll-down">↓</div>
+    </header>
+
+    <div class="container">
+        
+        <section class="intro-text fade-in">
+            <p>2025’i geride bırakırken, fincanlarınızda bıraktığımız izlere dönüp bakmak istedik. Bu sene birlikte yazdığımız hikaye, geçen yıldan çok daha büyük, çok daha tutkulu. Kavurma makinemiz neredeyse hiç durmadı ve Ankara’dan çıkan lezzet yolculuğumuz Türkiye'nin 81 iline ulaştı.</p>
+            <p style="margin-top: 15px; font-weight: bold;">Web sitemizde 3.385 sipariş ile 7.109 paket kahveyi mutfaklarınıza konuk ettik!</p>
+        </section>
+
+        <section class="stats-grid fade-in">
+            <div class="stat-card">
+                <span class="stat-number" data-target="35">0</span>
+                <span class="stat-label">Ton Kahve Kavruldu</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-target="125000">0</span>
+                <span class="stat-label">Fincandan Fazla Demlendi</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-target="7109">0</span>
+                <span class="stat-label">Paket Eve Girdi</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">%0.26</span>
+                <span class="stat-label">İade Oranı (Kusursuzluk!)</span>
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h2 style="text-align: center; margin-bottom: 30px;">Şehirlerin Kahve Savaşı</h2>
+            
+            <div class="city-battle">
+                <div class="city">
+                    <h3>ANKARA</h3>
+                    <p class="highlight">Sipariş Lideri</p>
+                    <p>740 Sipariş ile ev sahibi.</p>
+                </div>
+                <div class="vs">VS</div>
+                <div class="city">
+                    <h3>İSTANBUL</h3>
+                    <p class="highlight">Ürün Lideri</p>
+                    <p>2.382 Paket ile hacim şampiyonu.</p>
+                </div>
+            </div>
+
+            <div class="city-lists-container">
+                <div class="city-list-box">
+                    <h3>🏆 Sipariş Sayısına Göre İlk 5</h3>
+                    <div class="city-row">
+                        <span class="rank">1.</span>
+                        <span class="city-name">Ankara</span>
+                  
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">2.</span>
+                        <span class="city-name">İstanbul</span>
+                       
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">3.</span>
+                        <span class="city-name">İzmir</span>
+                    
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">4.</span>
+                        <span class="city-name">Antalya</span>
+                       
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">5.</span>
+                        <span class="city-name">Konya</span>
+                     
+                    </div>
+                </div>
+
+                <div class="city-list-box">
+                    <h3>📦 Ürün Adedine Göre İlk 5</h3>
+                    <div class="city-row">
+                        <span class="rank">1.</span>
+                        <span class="city-name">İstanbul</span>
+                   
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">2.</span>
+                        <span class="city-name">Ankara</span>
+                      
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">3.</span>
+                        <span class="city-name">İzmir</span>
+                 
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">4.</span>
+                        <span class="city-name">Antalya</span>
+                     
+                    </div>
+                    <div class="city-row">
+                        <span class="rank">5.</span>
+                        <span class="city-name">Konya</span>
+                       
+                    </div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 30px; font-style: italic; color: var(--gray);">Türkiye'nin 81 iline sevgi ve kahve gönderdik!</p>
+        </section>
+
+        <section class="august-card fade-in">
+            <h2>Yılın En Yoğun Dönemi</h2>
+            <p style="font-size: 1.2rem; margin: 20px 0;">Ağustos ayında rekor kırdık, yılın en yoğun dönemini yaşadık.</p>
+            <p>Sıcaklar bastırdığında, serinleten <em>Cold Brew</em> ve <em>Iced Latte</em> reçetelerinin hakkını verdiniz.</p>
+        </section>
+
+        <section class="fade-in">
+            <h2 style="margin-bottom: 30px;">2025'in Favorileri</h2>
+            <div class="favorites-grid">
+                <div class="coffee-card">
+                    <h3>Morning Blend</h3>
+                    <p>Sabahların tartışmasız lideri! Uyanmak istemeyenlerin en büyük kurtarıcısı.</p>
+                    <div class="tags" style="margin-top: 15px;">
+                        <span>Çikolata</span>
+                        <span>Fındık</span>
+                        <span>Karamel</span>
+                    </div>
+                </div>
+                <div class="coffee-card">
+                    <h3>Huehuetenango</h3>
+                    <p>Guatemala’nın tatlılığı. Denge arayanların bu seneki favorisi.</p>
+                    <div class="tags" style="margin-top: 15px;">
+                        <span>Kırmızı Elma</span>
+                        <span>Karamel</span>
+                        <span>Washed</span>
+                    </div>
+                </div>
+                <div class="coffee-card">
+                    <h3>Esperanza & Benti Nenka</h3>
+                    <p>Meyve severlerin yükselişi! Kolombiya ve Etiyopya'nın meyve bahçeleri.</p>
+                    <div class="tags" style="margin-top: 15px;">
+                        <span>Kayısı</span>
+                        <span>Şeftali</span>
+                        <span>Kuş Üzümü</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="flavor-analysis fade-in">
+            <h2 style="margin-bottom: 30px;">2025 Türkiye Damak Haritası</h2>
+            
+            <div class="analysis-item">
+                <div style="display: flex; justify-content: space-between;">
+                    <strong>Çikolata, Fındık</strong>
+                    <span>%60</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 60%;"></div>
+                </div>
+                <p style="font-size: 0.9rem; color: #777; margin-top: 5px;">Güven arayanlar çoğunlukta.</p>
+            </div>
+
+            <div class="analysis-item">
+                <div style="display: flex; justify-content: space-between;">
+                    <strong>Sarı ve Kırmızı Meyveler</strong>
+                    <span>%40</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 40%; background: linear-gradient(90deg, #ff9966, #ff5e62);"></div>
+                </div>
+                <p style="font-size: 0.9rem; color: #777; margin-top: 5px;">Esperanza ve Benti Nenka ile büyük yükseliş.</p>
+            </div>
+
+            <div class="analysis-item">
+                <div style="display: flex; justify-content: space-between;">
+                    <strong>İşleme Tercihi: Natural (Doğal)</strong>
+                    <span>%55</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 55%; background: linear-gradient(90deg, #56ab2f, #a8e063);"></div>
+                </div>
+                <p style="font-size: 0.9rem; color: #777; margin-top: 5px;">Yoğun gövde sevenler az farkla önde.</p>
+            </div>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <span class="logo">TETRA N ROASTERY</span>
+        <p>Her kahve bir hikaye anlatır.</p>
+        <p style="margin-top: 20px; font-style: italic;">From Ankara with Love 🖤</p>
+        <p style="margin-top: 10px; opacity: 0.6;">© 2025 Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script>
+        // Intersection Observer for Fade-in Animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Trigger counters if this is the stats section
+                    if (entry.target.classList.contains('stats-grid')) {
+                        startCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Number Counter Animation
+        let counted = false;
+        function startCounters() {
+            if (counted) return;
+            
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                if (!target) return; // Skip if no target (like percentages)
+
+                const duration = 2000; // 2 seconds
+                const increment = target / (duration / 16); 
+                
+                let current = 0;
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current).toLocaleString('tr-TR');
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target.toLocaleString('tr-TR') + "+";
+                        // Special check for ton
+                        if(target == 35) counter.innerText = "35";
+                    }
+                };
+                updateCounter();
+            });
+            counted = true;
+        }
+    </script>
+</body>
+</html>
