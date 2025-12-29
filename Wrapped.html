@@ -20,11 +20,15 @@
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
-        body {
+        html, body {
             background-color: var(--light);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            /* Iframe içinde kaydırmayı garanti altına almak için */
+            height: 100%; 
+            overflow-y: auto; 
+            scroll-behavior: smooth;
         }
 
         /* Typography */
@@ -40,7 +44,8 @@
 
         /* Header / Hero */
         header {
-            height: 100vh;
+            height: 100vh; /* Iframe boyutu ne olursa olsun tam ekran kaplar */
+            min-height: 500px; /* Çok küçük iframe'lerde bozulmayı önler */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -74,6 +79,9 @@
             font-size: 2rem;
             animation: bounce 2s infinite;
             color: var(--accent);
+            cursor: pointer; /* Tıklanabilir olduğunu gösterir */
+            z-index: 10;
+            padding: 20px; /* Tıklama alanını genişletir */
         }
 
         /* Container */
@@ -335,10 +343,12 @@
     <header>
         <h1>2025'te Fincanlarda<br><span class="highlight">Bıraktığımız İzler</span></h1>
         <p>35 Ton Kahve, 125.000+ Hikaye ve Sayısız Mutluluk.</p>
-        <div class="scroll-down">↓</div>
+        <!-- Tıklanabilir alan -->
+        <div class="scroll-down" id="scrollBtn">↓</div>
     </header>
 
-    <div class="container">
+    <!-- Hedef ID eklendi -->
+    <div class="container" id="main-content">
         
         <section class="intro-text fade-in">
             <p>2025’i geride bırakırken, fincanlarınızda bıraktığımız izlere dönüp bakmak istedik. Bu sene birlikte yazdığımız hikaye, geçen yıldan çok daha büyük, çok daha tutkulu. Kavurma makinemiz neredeyse hiç durmadı ve Ankara’dan çıkan lezzet yolculuğumuz Türkiye'nin 81 iline ulaştı.</p>
@@ -359,7 +369,7 @@
                 <span class="stat-label">Paket Eve Girdi</span>
             </div>
             <div class="stat-card">
-                <span class="stat-number">%0.26</span>
+                <span class="stat-number" data-target="0.26">%0.26</span>
                 <span class="stat-label">İade Oranı (Kusursuzluk!)</span>
             </div>
         </section>
@@ -387,27 +397,22 @@
                     <div class="city-row">
                         <span class="rank">1.</span>
                         <span class="city-name">Ankara</span>
-                  
                     </div>
                     <div class="city-row">
                         <span class="rank">2.</span>
                         <span class="city-name">İstanbul</span>
-                       
                     </div>
                     <div class="city-row">
                         <span class="rank">3.</span>
                         <span class="city-name">İzmir</span>
-                    
                     </div>
                     <div class="city-row">
                         <span class="rank">4.</span>
                         <span class="city-name">Antalya</span>
-                       
                     </div>
                     <div class="city-row">
                         <span class="rank">5.</span>
                         <span class="city-name">Konya</span>
-                     
                     </div>
                 </div>
 
@@ -416,27 +421,22 @@
                     <div class="city-row">
                         <span class="rank">1.</span>
                         <span class="city-name">İstanbul</span>
-                   
                     </div>
                     <div class="city-row">
                         <span class="rank">2.</span>
                         <span class="city-name">Ankara</span>
-                      
                     </div>
                     <div class="city-row">
                         <span class="rank">3.</span>
                         <span class="city-name">İzmir</span>
-                 
                     </div>
                     <div class="city-row">
                         <span class="rank">4.</span>
                         <span class="city-name">Antalya</span>
-                     
                     </div>
                     <div class="city-row">
                         <span class="rank">5.</span>
                         <span class="city-name">Konya</span>
-                       
                     </div>
                 </div>
             </div>
@@ -531,7 +531,16 @@
     </footer>
 
     <script>
-        // Intersection Observer for Fade-in Animations
+        // --- SCROLL BUTTON LOGIC ---
+        document.getElementById('scrollBtn').addEventListener('click', function() {
+            const content = document.getElementById('main-content');
+            content.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+
+        // --- INTERSECTION OBSERVER FOR FADE-IN ---
         const observerOptions = {
             threshold: 0.1
         };
@@ -553,15 +562,19 @@
             observer.observe(el);
         });
 
-        // Number Counter Animation
+        // --- COUNTER LOGIC ---
         let counted = false;
         function startCounters() {
             if (counted) return;
             
             const counters = document.querySelectorAll('.stat-number');
             counters.forEach(counter => {
-                const target = +counter.getAttribute('data-target');
-                if (!target) return; // Skip if no target (like percentages)
+                const targetText = counter.getAttribute('data-target');
+                // Check if the target is a float or integer
+                const isFloat = targetText.includes('.') && targetText.length < 5; // Simple check for small percentages like 0.26
+                const target = parseFloat(targetText);
+                
+                if (!target) return;
 
                 const duration = 2000; // 2 seconds
                 const increment = target / (duration / 16); 
@@ -570,12 +583,21 @@
                 const updateCounter = () => {
                     current += increment;
                     if (current < target) {
-                        counter.innerText = Math.ceil(current).toLocaleString('tr-TR');
+                        if(isFloat) {
+                            counter.innerText = "%" + current.toFixed(2);
+                        } else {
+                            counter.innerText = Math.ceil(current).toLocaleString('tr-TR');
+                        }
                         requestAnimationFrame(updateCounter);
                     } else {
-                        counter.innerText = target.toLocaleString('tr-TR') + "+";
-                        // Special check for ton
-                        if(target == 35) counter.innerText = "35";
+                        // Final Set
+                        if(isFloat) {
+                            counter.innerText = "%" + target;
+                        } else if(target == 35) {
+                            counter.innerText = "35";
+                        } else {
+                            counter.innerText = target.toLocaleString('tr-TR') + "+";
+                        }
                     }
                 };
                 updateCounter();
