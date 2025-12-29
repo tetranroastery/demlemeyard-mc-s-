@@ -55,6 +55,7 @@
             text-align: center;
             padding: 20px;
             position: relative;
+            cursor: pointer; /* Tıklanabilir olduğunu göster */
         }
 
         header h1 {
@@ -62,7 +63,7 @@
             color: white;
             margin-bottom: 20px;
             opacity: 0;
-            animation: fadeIn Up 1s forwards;
+            animation: fadeInUp 1s forwards; /* Yazım hatası düzeltildi: fadeIn Up -> fadeInUp */
         }
 
         header p {
@@ -340,7 +341,7 @@
 </head>
 <body>
 
-    <header>
+    <header id="main-header">
         <h1>2025'te Fincanlarda<br><span class="highlight">Bıraktığımız İzler</span></h1>
         <p>35 Ton Kahve, 125.000+ Hikaye ve Sayısız Mutluluk.</p>
         <!-- Tıklanabilir alan -->
@@ -531,13 +532,32 @@
     </footer>
 
     <script>
-        // --- SCROLL BUTTON LOGIC ---
-        document.getElementById('scrollBtn').addEventListener('click', function() {
+        // --- SCROLL BUTTON & HEADER CLICK LOGIC ---
+        const header = document.getElementById('main-header');
+        const scrollBtn = document.getElementById('scrollBtn');
+
+        function scrollToContent() {
             const content = document.getElementById('main-content');
             content.scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'start'
             });
+            // Focus window to enable keyboard controls immediately
+            window.focus();
+        }
+
+        // Hem butona hem de header'ın tamamına tıklama özelliği ekledik
+        scrollBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Header click'i ile çakışmasın
+            scrollToContent();
+        });
+
+        header.addEventListener('click', scrollToContent);
+
+        // Sayfa herhangi bir yerine tıklandığında focus alması için
+        // Bu, klavye tuşlarının (space, ok tuşları) çalışmasını garanti eder.
+        window.addEventListener('click', () => {
+            window.focus();
         });
 
         // --- INTERSECTION OBSERVER FOR FADE-IN ---
