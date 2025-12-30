@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra N - Kahve Doktoru</title>
+    <style>
+        :root {
+            --primary: #1a1a1a; /* Tetra N Siyahı */
+            --accent: #d4a373; /* Kahve Tonu */
+            --bg: #fdfcf5; /* Hafif Krem */
+            --text: #333;
+            --white: #ffffff;
+            --danger: #e76f51; /* Ekşi/Acı uyarı renkleri */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .doctor-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+
+        /* Header */
+        .doc-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .doc-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .doc-header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .doc-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Content Area */
+        .doc-content {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+
+        /* Symptom Buttons Grid */
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .symptom-card {
+            background: var(--bg);
+            border: 2px solid #eee;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .symptom-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(212, 163, 115, 0.2);
+        }
+
+        .symptom-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .symptom-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        /* Diagnosis Result Section (Hidden by default) */
+        .diagnosis-result {
+            display: none; /* JS ile açılacak */
+            animation: fadeIn 0.5s ease;
+        }
+
+        .diagnosis-title {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .diagnosis-box {
+            background: #fff8f0;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .diagnosis-box h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .diagnosis-box ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .diagnosis-box li {
+            margin-bottom: 8px;
+        }
+
+        .btn-reset {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-reset:hover {
+            background: var(--accent);
+        }
+
+        /* Footer */
+        .doc-footer {
+            background: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .doc-header h1 { font-size: 1.5rem; }
+            .symptoms-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="doctor-container">
+    <div class="doc-header">
+        <span class="doc-icon">🩺</span>
+        <h1>Tetra N Kahve Doktoru</h1>
+        <p>Demlemenizde bir sorun mu var? <br>Gelin reçetenizi birlikte iyileştirelim.</p>
+    </div>
+
+    <div class="doc-content">
+        
+        <div id="step-symptoms">
+            <p class="question-text">Kahvenizin tadı nasıl?</p>
+            <div class="symptoms-grid">
+                <div class="symptom-card" onclick="diagnose('sour')">
+                    <span class="symptom-icon">🍋</span>
+                    <span class="symptom-title">Ekşi ve Sulu</span>
+                    <p style="font-size:0.8rem; margin-top:5px; color:#666;">Yüz buruşturan keskinlik</p>
+                </div>
+
+                <div class="symptom-card" onclick="diagnose('bitter')">
+                    <span class="symptom-icon">🍫</span>
+                    <span class="symptom-title">Acı ve Buruk</span>
+                    <p style="font-size:0.8rem; margin-top:5px; color:#666;">Boğazı kurutan yoğunluk</p>
+                </div>
+
+                <div class="symptom-card" onclick="diagnose('flat')">
+                    <span class="symptom-icon">💧</span>
+                    <span class="symptom-title">Düz ve Boş</span>
+                    <p style="font-size:0.8rem; margin-top:5px; color:#666;">Aroma yok, su gibi</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="step-result" class="diagnosis-result">
+            <h3 class="diagnosis-title" id="result-title">Teşhis Başlığı</h3>
+            
+            <div class="diagnosis-box">
+                <h4>🧐 Olası Sebep:</h4>
+                <p id="result-cause">Sebep açıklaması buraya gelecek.</p>
+            </div>
+
+            <div class="diagnosis-box" style="border-left-color: #2a9d8f; background-color: #e9f5f4;">
+                <h4>💊 Tetra N Reçetesi:</h4>
+                <ul id="result-solution">
+                    <li>Çözüm maddesi 1</li>
+                </ul>
+            </div>
+
+            <p style="margin-bottom: 20px; font-style: italic; color: #666;">
+                Referans: Tetra N Roastery Hand Book, Sayfa 19
+            </p>
+
+            <button class="btn-reset" onclick="resetDoctor()">Başka Bir Sorun Var</button>
+        </div>
+
+    </div>
+
+    <div class="doc-footer">
+        <p>Unutmayın: Kahvenin %98'i sudur. Suyunuzu test ettiniz mi?</p>
+        <p style="margin-top: 5px; font-weight: bold;">From Ankara with love 🖤</p>
+    </div>
+</div>
+
+<script>
+    // Hand Book Data (Sayfa 19)
+    const diagnosisData = {
+        'sour': {
+            title: "Teşhis: Yetersiz Çözünme (Under-Extraction)",
+            cause: "Kahveden yeterince aroma alamamışsınız. Su kahveyle ya çok az temas etmiş ya da parçacıklar çok büyük kalmış.",
+            solutions: [
+                "<strong>Öğütümü İnceltin:</strong> Su kahvenin içine daha rahat işlesin.",
+                "<strong>Süreyi Uzatın:</strong> Demleme süresini biraz artırın.",
+                "<strong>Oranı Düşürün:</strong> Kahve/Su oranında su miktarını azaltmayı deneyebilirsiniz."
+            ]
+        },
+        'bitter': {
+            title: "Teşhis: Aşırı Çözünme (Over-Extraction)",
+            cause: "Kahvenin istenmeyen acı tatlarını ve posasını suya geçirmişsiniz. Demleme gereğinden fazla sürmüş olabilir.",
+            solutions: [
+                "<strong>Öğütümü Kalınlaştırın:</strong> Su akışı hızlansın.",
+                "<strong>Süreyi Kısaltın:</strong> Demlemeyi daha erken bitirin.",
+                "<strong>Oranı Artırın:</strong> Kahveye oranla daha fazla su kullanmayı deneyebilirsiniz."
+            ]
+        },
+        'flat': {
+            title: "Teşhis: Zayıf Gövde / Düz Tat",
+            cause: "Kahve potansiyelini ortaya koyamamış. Genellikle kullanılan kahve miktarının (dozun) az gelmesinden kaynaklanır.",
+            solutions: [
+                "<strong>Dozu Artırın:</strong> Kullandığınız kahve gramajını yükseltin.",
+                "<strong>Daha İnce Öğütün:</strong> Çözünmeyi artırarak aromayı ortaya çıkarın."
+            ]
+        }
+    };
+
+    function diagnose(type) {
+        // Veriyi çek
+        const data = diagnosisData[type];
+        
+        // İçeriği doldur
+        document.getElementById('result-title').innerText = data.title;
+        document.getElementById('result-cause').innerText = data.cause;
+        
+        const solutionList = document.getElementById('result-solution');
+        solutionList.innerHTML = ""; // Temizle
+        data.solutions.forEach(sol => {
+            const li = document.createElement('li');
+            li.innerHTML = sol;
+            solutionList.appendChild(li);
+        });
+
+        // Ekranı değiştir
+        document.getElementById('step-symptoms').style.display = 'none';
+        document.getElementById('step-result').style.display = 'block';
+    }
+
+    function resetDoctor() {
+        document.getElementById('step-result').style.display = 'none';
+        document.getElementById('step-symptoms').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
