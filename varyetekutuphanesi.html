@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra N - Varyete Kütüphanesi (V2.0)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap');
+
+        :root {
+            --primary: #1a1a1a;
+            --accent: #d4a373;
+            --light: #fdfcf5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            color: var(--primary);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .variety-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .variety-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+
+        .active-tab {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .modal-overlay {
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        .stat-bar {
+            height: 6px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 1.2s ease-in-out;
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent);
+            ring: 2px solid var(--accent);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--light); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-black text-white py-16 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-6xl mb-4">Varyete Kütüphanesi</h1>
+            <p class="text-accent tracking-[0.3em] uppercase text-xs mb-8">Nitelikli Kahvenin Genetik Mirası</p>
+            <p class="text-gray-400 max-w-2xl mx-auto italic text-sm leading-relaxed">
+                "Küresel kahve endüstrisi, biyolojik çeşitlilik, iklim direnci ve duyusal mükemmellik arayışının kesişme noktasında kritik bir dönüşüm süreci yaşamaktadır."
+            </p>
+        </div>
+    </header>
+
+    <!-- Search & Navigation -->
+    <nav class="sticky top-0 bg-white shadow-lg z-40 py-6 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+                <!-- Tabs -->
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold active-tab transition-all">HEPSİ</button>
+                    <button onclick="filterCategory('atalar')" id="tab-atalar" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">GELENEKSEL ATALAR</button>
+                    <button onclick="filterCategory('mutasyon')" id="tab-mutasyon" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">MUTASYONLAR</button>
+                    <button onclick="filterCategory('hibrit')" id="tab-hibrit" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">HİBRİT / MELEZ</button>
+                    <button onclick="filterCategory('bolgesel')" id="tab-bolgesel" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">BÖLGESEL YILDIZLAR</button>
+                </div>
+                <!-- Search -->
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="searchInput" placeholder="Varyete ara..." onkeyup="searchVarieties()" class="w-full px-4 py-2 rounded-full border border-gray-200 text-sm focus:outline-none focus:border-accent">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Grid -->
+    <main class="max-w-7xl mx-auto py-12 px-6">
+        <div id="variety-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- JS Content -->
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-2xl text-gray-400 hover:text-black z-10">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-16 text-center px-6">
+        <div class="max-w-4xl mx-auto">
+            <p class="text-accent mb-4 tracking-[0.4em] font-bold">TETRA N ROASTERY</p>
+            <p class="text-gray-500 text-sm mb-8"></p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-gray-600 border-t border-gray-900 pt-8">
+             
+                <div>Nitelikli Kahve Uzmanlığı</div>
+                <div>From Ankara with love 🖤</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // PDF Verileri ve Genişletilmiş Varyete Listesi (53 Adet)
+        const varieties = [
+            // GELENEKSEL ATALAR (Typica & Bourbon & Others)
+            { id: 'typica', name: 'Typica', category: 'atalar', origin: 'Etiyopya / Yemen', desc: 'Kahve dünyasının genetik temelidir. Temiz içimi ve narenciye tatlılığıyla bilinir.', quality: 90, yield: 40, disease: 20, cup: 'Narenciye, çiçeksi, zarif tatlılık.', bio: 'Coffea arabica (Tetraploid $2n=44$)' },
+            { id: 'bourbon', name: 'Bourbon', category: 'atalar', origin: 'Reunion Adası', desc: 'Typica\'nın doğal mutasyonudur. Daha kompleks ve tatlı profiliyle ünlüdür.', quality: 94, yield: 55, disease: 30, cup: 'Karamel, esmer şeker, yoğun tatlılık.', bio: 'Typica türevi' },
+            { id: 'sumatra', name: 'Sumatra', category: 'atalar', origin: 'Endonezya', desc: 'Typica grubuna ait, bölgeye özgü "Giling Basah" işlemiyle karakterize edilir.', quality: 85, yield: 50, disease: 40, cup: 'Topraksı, baharatlı, odunsu.', bio: 'Typica yerel varyetesi' },
+            { id: 'java', name: 'Java', category: 'atalar', origin: 'Endonezya / Kamerun', desc: 'Typica kökenli, pas hastalığına karşı orta dirençli, uzun çekirdekli bir türdür.', quality: 88, yield: 60, disease: 60, cup: 'Çikolata, fındık, temiz bitiş.', bio: 'Typica grubu' },
+            { id: 'moka', name: 'Moka', category: 'atalar', origin: 'Yemen', desc: 'Çok küçük meyveleri olan, genetik olarak Bourbon\'a yakın tarihi bir varyete.', quality: 92, yield: 30, disease: 30, cup: 'Çikolata, meyvemsi, kompleks.', bio: 'Bourbon türevi' },
+            { id: 'heirloom', name: 'Heirloom', category: 'atalar', origin: 'Etiyopya', desc: 'Binlerce yıllık vahşi genetik havuzu temsil eden yerel miras türleridir.', quality: 98, yield: 50, disease: 70, cup: 'Yasemin, Earl Grey, şeftali.', bio: 'Yabani Arabica popülasyonu' },
+            
+            // MUTASYONLAR
+            { id: 'caturra', name: 'Caturra', category: 'mutasyon', origin: 'Brezilya', desc: 'Bourbon\'un doğal "cüce" mutasyonudur. Yüksek verimliliğiyle bilinir.', quality: 85, yield: 85, disease: 40, cup: 'Limon asiditesi, orta gövde.', bio: 'Bourbon Mutasyonu' },
+            { id: 'pacas', name: 'Pacas', category: 'mutasyon', origin: 'El Salvador', desc: 'Bourbon\'un doğal bodur mutasyonudur. El Salvador tarımı için kritiktir.', quality: 86, yield: 80, disease: 35, cup: 'Tatlılık, dengeli asidite.', bio: 'Bourbon Mutasyonu' },
+            { id: 'villa-sarchi', name: 'Villa Sarchi', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Bourbon\'un bodur mutasyonudur. Yüksek rakımlarda çok başarılıdır.', quality: 88, yield: 75, disease: 45, cup: 'Canlı asidite, meyvemsi.', bio: 'Bourbon Mutasyonu' },
+            { id: 'maragogype', name: 'Maragogype', category: 'mutasyon', origin: 'Brezilya', desc: 'Devasa çekirdekleriyle (Elephant Bean) bilinen Typica mutasyonudur.', quality: 87, yield: 45, disease: 25, cup: 'Narenciye, hafif gövde.', bio: 'Typica Mutasyonu' },
+            { id: 'san-ramon', name: 'San Ramon', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Typica\'nın bodur mutasyonu. Rüzgara karşı çok dirençlidir.', quality: 82, yield: 70, disease: 30, cup: 'Klasik Typica profili.', bio: 'Typica Mutasyonu' },
+            { id: 'tekisic', name: 'Tekisic', category: 'mutasyon', origin: 'El Salvador', desc: 'Bourbon\'dan seçilmiş, çok yüksek fincan kalitesine sahip bir hattır.', quality: 93, yield: 50, disease: 35, cup: 'Yoğun tatlılık, kremsi gövde.', bio: 'Bourbon Seleksiyonu' },
+            { id: 'venecia', name: 'Venecia', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Caturra seleksiyonu, geç olgunlaşır ve yağmura dirençlidir.', quality: 86, yield: 80, disease: 40, cup: 'Temiz içim, yüksek tatlılık.', bio: 'Caturra seleksiyonu' },
+            { id: 'villalobos', name: 'Villalobos', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Typica mutasyonu, asiditesi çok parlak ve kalitelidir.', quality: 89, yield: 50, disease: 30, cup: 'Parlak asidite, çiçeksi.', bio: 'Typica Mutasyonu' },
+
+            // HİBRİTLER / MELEZLER (Introgresive & Crosses)
+            { id: 'mundo-novo', name: 'Mundo Novo', category: 'hibrit', origin: 'Brezilya', desc: 'Typica ve Bourbon\'un doğal melezidir. Güçlü ve dayanıklıdır.', quality: 82, yield: 90, disease: 50, cup: 'Fındık, karamel, düşük asidite.', bio: 'Natural Hybrid' },
+            { id: 'catuai', name: 'Catuai', category: 'hibrit', origin: 'Brezilya', desc: 'Mundo Novo ve Caturra melezi. Rüzgar ve yağmura çok dirençlidir.', quality: 83, yield: 95, disease: 45, cup: 'Çikolata, temiz bitiş.', bio: 'Cross (Yapay Melez)' },
+            { id: 'pacamara', name: 'Pacamara', category: 'hibrit', origin: 'El Salvador', desc: 'Pacas ve Maragogype melezi. Çok büyük çekirdekli ve kompleks.', quality: 95, yield: 60, disease: 40, cup: 'Tropikal meyveler, baharat, gövde.', bio: 'Cross' },
+            { id: 'maracaturra', name: 'Maracaturra', category: 'hibrit', origin: 'Nikaragua', desc: 'Maragogype ve Caturra melezi. Meyvemsi profili çok güçlüdür.', quality: 91, yield: 65, disease: 40, cup: 'Şeftali, kayısı, narenciye.', bio: 'Cross' },
+            { id: 'catimor', name: 'Catimor', category: 'hibrit', origin: 'Portekiz', desc: 'Caturra ve Timor Hybrid melezi. Hastalıklara çok dirençlidir.', quality: 80, yield: 100, disease: 95, cup: 'Fındık, odunsu, orta asidite.', bio: 'Introgresive Hybrid' },
+            { id: 'sarchimor', name: 'Sarchimor', category: 'hibrit', origin: 'Portekiz', desc: 'Villa Sarchi ve Timor Hybrid melezi. Pas direncinde zirvedir.', quality: 82, yield: 95, disease: 98, cup: 'Baharatlı, çikolata.', bio: 'Introgresive Hybrid' },
+            { id: 'colombia', name: 'Colombia', category: 'hibrit', origin: 'Kolombiya', desc: 'Cenicafe tarafından pas hastalığına karşı geliştirilmiş stabil bir hibrit.', quality: 85, yield: 90, disease: 92, cup: 'Klasik Kolombiya, dengeli.', bio: 'Introgresive Hybrid' },
+            { id: 'castillo', name: 'Castillo', category: 'hibrit', origin: 'Kolombiya', desc: 'En popüler pas dirençli varyete. Kolombiya tarımının bel kemiği.', quality: 86, yield: 95, disease: 95, cup: 'Kırmızı meyve, karamel.', bio: 'Introgresive Hybrid' },
+            { id: 'tabi', name: 'Tabi', category: 'hibrit', origin: 'Kolombiya', desc: 'Typica, Bourbon ve Timor melezi. Uzun çekirdek yapısına sahiptir.', quality: 88, yield: 70, disease: 90, cup: 'Zarif, meyvemsi, tatlı.', bio: 'Introgresive Hybrid' },
+            { id: 'ihcafe90', name: 'IHCAFE 90', category: 'hibrit', origin: 'Honduras', desc: 'Honduras\'ta yaygın kullanılan, verimi yüksek Catimor türevi.', quality: 82, yield: 98, disease: 90, cup: 'Gövde, karamel, fındık.', bio: 'Catimor grubu' },
+            { id: 'lempira', name: 'Lempira', category: 'hibrit', origin: 'Honduras', desc: 'Yüksek verimli Catimor. Alçak irtifalarda çok başarılıdır.', quality: 81, yield: 100, disease: 85, cup: 'Düşük asidite, tatlı.', bio: 'Catimor grubu' },
+            { id: 'obata', name: 'Obata', category: 'hibrit', origin: 'Brezilya', desc: 'Sarchimor grubu, çok iri meyveli ve hastalıklara dayanıklıdır.', quality: 84, yield: 90, disease: 92, cup: 'Bal, narenciye.', bio: 'Sarchimor grubu' },
+            { id: 'marsellesa', name: 'Marsellesa', category: 'hibrit', origin: 'Nikaragua', desc: 'Sarchimor seleksiyonu, asiditesi yüksek ve dayanıklıdır.', quality: 86, yield: 90, disease: 95, cup: 'Parlak asidite, elma.', bio: 'Sarchimor grubu' },
+            { id: 'parainema', name: 'Parainema', category: 'hibrit', origin: 'Honduras', desc: 'Sarchimor türevi, fincan kalitesiyle ödül kazanmış bir hibrit.', quality: 90, yield: 85, disease: 98, cup: 'Tropikal meyveler, nane, ferah.', bio: 'Sarchimor grubu' },
+            { id: 'oro-azteca', name: 'Oro Azteca', category: 'hibrit', origin: 'Meksika', desc: 'Meksika\'da geliştirilmiş, pas direnci yüksek bir kültivar.', quality: 83, yield: 92, disease: 94, cup: 'Çikolata, dengeli.', bio: 'Catimor grubu' },
+            { id: 'centroamericano', name: 'Centroamericano', category: 'hibrit', origin: 'Orta Amerika', desc: 'F1 Hibrit, pas direnci ve yüksek fincan kalitesini birleştirir.', quality: 91, yield: 98, disease: 95, cup: 'Kompleks, çiçeksi, narenciye.', bio: 'F1 Hybrid' },
+            { id: 'milenio', name: 'Milenio', category: 'hibrit', origin: 'Orta Amerika', desc: 'F1 Hibrit, yüksek rakımlarda olağanüstü performans sergiler.', quality: 90, yield: 95, disease: 90, cup: 'Meyvemsi, tatlı.', bio: 'F1 Hybrid' },
+            { id: 'casiopea', name: 'Casiopea', category: 'hibrit', origin: 'Orta Amerika', desc: 'F1 Hibrit, Caturra ve Etiyopya varyetesi melezidir.', quality: 92, yield: 85, disease: 40, cup: 'Yasemin, limon, Earl Grey.', bio: 'F1 Hybrid' },
+            { id: 'starmaya', name: 'Starmaya', category: 'hibrit', origin: 'Orta Amerika', desc: 'Tohumla üretilebilen ilk F1 Hibritlerden biridir.', quality: 89, yield: 95, disease: 90, cup: 'Temiz, dengeli, meyvemsi.', bio: 'F1 Hybrid' },
+            { id: 'evaluna', name: 'Evaluna', category: 'hibrit', origin: 'Orta Amerika', desc: 'Yeni nesil F1, kalite potansiyeli çok yüksektir.', quality: 92, yield: 90, disease: 95, cup: 'Kayısı, çiçeksi.', bio: 'F1 Hybrid' },
+            { id: 'icatu', name: 'Icatu', category: 'hibrit', origin: 'Brezilya', desc: 'Robusta ve Bourbon arasındaki karmaşık melezlemelerin sonucudur.', quality: 84, yield: 90, disease: 85, cup: 'Kakao, yoğun gövde.', bio: 'Interspecific Hybrid' },
+            { id: 'arara', name: 'Arara', category: 'hibrit', origin: 'Brezilya', desc: 'Sarchimor ve Yellow Catuai melezi, sarı meyveli, çok tatlı.', quality: 91, yield: 85, disease: 90, cup: 'Bal, kremsi, sarı meyveler.', bio: 'Natural Hybrid (Brezilya)' },
+
+            // BÖLGESEL YILDIZLAR (Kenya & Ethiopia & Special)
+            { id: 'sl28', name: 'SL-28', category: 'bolgesel', origin: 'Kenya', desc: 'Meyve suyu berraklığında asiditesiyle ikonik Kenya varyetesi.', quality: 97, yield: 65, disease: 30, cup: 'Siyah frenk üzümü, domates asiditesi.', bio: 'Bourbon grubu' },
+            { id: 'sl34', name: 'SL-34', category: 'bolgesel', origin: 'Kenya', desc: 'SL-28\'e benzer ancak yüksek rakımda ve yağışta daha dayanıklıdır.', quality: 95, yield: 70, disease: 35, cup: 'Gövde, kompleks asidite.', bio: 'Typica grubu türevi' },
+            { id: 'batian', name: 'Batian', category: 'bolgesel', origin: 'Kenya', desc: 'Pas direnci yüksek ve kalitesi SL-28 ile yarışan yeni Kenya yıldızı.', quality: 94, yield: 90, disease: 85, cup: 'Vişne, siyah çay, parlak.', bio: 'Composite Variety' },
+            { id: 'jackson', name: 'Jackson', category: 'bolgesel', origin: 'Ruanda / Burundi', desc: 'Bourbon seleksiyonu, Doğu Afrika\'nın karakterini yansıtır.', quality: 92, yield: 55, disease: 40, cup: 'Çiçeksi, limonotu.', bio: 'Bourbon seleksiyonu' },
+            { id: 'k7', name: 'K7', category: 'bolgesel', origin: 'Kenya', desc: 'Pas direnci için seçilmiş eski bir varyete, hala çok popülerdir.', quality: 89, yield: 60, disease: 70, cup: 'Narenciye, fındık.', bio: 'French Mission türevi' },
+            { id: 'gesha', name: 'Gesha (Gori Gesha)', category: 'bolgesel', origin: 'Etiyopya / Panama', desc: 'Dünyanın en pahalı ve aromatik varyetesi. Çay benzeri zarafet.', quality: 100, yield: 35, disease: 45, cup: 'Yasemin, bergamot, nektarin.', bio: 'Wild Ethiopian' },
+            { id: '74110', name: '74110', category: 'bolgesel', origin: 'Etiyopya', desc: 'CBD direncine sahip, narenciye profiliyle ünlü Etiyopya seleksiyonu.', quality: 96, yield: 65, disease: 80, cup: 'Limon, çiçeksi, çok temiz.', bio: 'JARC Selection' },
+            { id: '74112', name: '74112', category: 'bolgesel', origin: 'Etiyopya', desc: '74110\'a benzer, Metu-Bishari ormanlarından seçilmiştir.', quality: 95, yield: 65, disease: 80, cup: 'Esmer şeker, çay, narenciye.', bio: 'JARC Selection' },
+            { id: '74158', name: '74158', category: 'bolgesel', origin: 'Etiyopya', desc: 'Yüksek irtifa Etiyopya kahvelerinin vazgeçilmez bir parçasıdır.', quality: 94, yield: 60, disease: 75, cup: 'Kayısı, vanilya.', bio: 'JARC Selection' },
+            { id: 'sidra', name: 'Sidra', category: 'bolgesel', origin: 'Ekvador', desc: 'Red Bourbon ve Typica melezi olduğu düşünülen, Gesha benzeri profil.', quality: 98, yield: 45, disease: 40, cup: 'Gül suyu, kırmızı elma, şampanya.', bio: 'Hybrid / Mutation' },
+            { id: 'wush-wush', name: 'Wush Wush', category: 'bolgesel', origin: 'Etiyopya', desc: 'Etiyopya\'nın Wushwush bölgesinden, aşırı egzotik bir varyete.', quality: 97, yield: 40, disease: 50, cup: 'Böğürtlen, çilek, kompleks.', bio: 'Landrace selection' },
+            { id: 'sudan-rume', name: 'Sudan Rume', category: 'bolgesel', origin: 'Sudan', desc: 'Vahşi bir tür, hibrit ıslahı için gen bankası olarak kullanılır.', quality: 96, yield: 30, disease: 60, cup: 'Bitkisel, kekik, zencefil, narenciye.', bio: 'Wild Arabica' },
+            { id: 'laurina', name: 'Laurina (Pointu)', category: 'bolgesel', origin: 'Reunion Adası', desc: 'Doğal olarak düşük kafeinli varyete. Çok nadirdir.', quality: 94, yield: 25, disease: 20, cup: 'Tatlı, yumuşak, mısır tatlılığı.', bio: 'Bourbon mutasyonu' },
+            { id: 'ruiru-11', name: 'Ruiru 11', category: 'bolgesel', origin: 'Kenya', desc: 'Hastalık direnci için geliştirilmiş yoğun gövdeli Kenya hibriti.', quality: 85, yield: 95, disease: 95, cup: 'Baharatlı, yoğun gövde.', bio: 'Composite Hybrid' },
+            { id: 'jurema', name: 'Jurema', category: 'bolgesel', origin: 'Brezilya', desc: 'Caturra mutasyonu, Brezilya\'nın "mini" kahvesi olarak bilinir.', quality: 80, yield: 70, disease: 40, cup: 'Temiz, düşük asidite.', bio: 'Caturra türevi' },
+            { id: 'pink-bourbon', name: 'Pink Bourbon', category: 'bolgesel', origin: 'Kolombiya', desc: 'Kırmızı ve Sarı Bourbon melezi, pembe meyvelidir.', quality: 97, yield: 50, disease: 40, cup: 'Gül, bal, tropikal.', bio: 'Rare Hybrid' },
+            { id: '741', name: '741', category: 'bolgesel', origin: 'Etiyopya', desc: 'Jimma Araştırma Merkezi\'nin en eski ve sağlam seleksiyonlarından.', quality: 93, yield: 60, disease: 70, cup: 'Siyah çay, turunçgil.', bio: 'JARC Selection' }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderGrid(data) {
+            const grid = document.getElementById('variety-grid');
+            if (data.length === 0) {
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-400">Aradığınız kriterde varyete bulunamadı.</div>';
+                return;
+            }
+            grid.innerHTML = data.map(v => `
+                <div class="variety-card bg-white rounded-2xl p-6 cursor-pointer flex flex-col justify-between" onclick="openModal('${v.id}')">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-accent">${v.category}</span>
+                            <span class="text-[10px] text-gray-300 font-mono">#${v.id.toUpperCase().substring(0,3)}</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">${v.name}</h3>
+                        <p class="text-gray-500 text-xs leading-relaxed line-clamp-3 mb-4">${v.desc}</p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-50 flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase">🌍 ${v.origin}</span>
+                        <div class="flex gap-1">
+                            <div class="w-1 h-1 rounded-full bg-accent"></div>
+                            <div class="w-1 h-1 rounded-full bg-accent opacity-50"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+            document.getElementById(`tab-${cat}`).classList.add('active-tab');
+            applyFilters();
+        }
+
+        function searchVarieties() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = varieties;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(v => v.category === currentFilter);
+            }
+
+            if (searchTerm) {
+                filtered = filtered.filter(v => 
+                    v.name.toLowerCase().includes(searchTerm) || 
+                    v.origin.toLowerCase().includes(searchTerm) ||
+                    v.desc.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            renderGrid(filtered);
+        }
+
+        function openModal(id) {
+            const v = varieties.find(item => item.id === id);
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-content');
+
+            content.innerHTML = `
+                <div class="p-8 md:p-12">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <!-- Left Info -->
+                        <div class="flex-1">
+                            <span class="text-accent font-black uppercase tracking-[0.2em] text-[10px]">${v.category}</span>
+                            <h2 class="text-4xl md:text-5xl font-bold mt-2 mb-4">${v.name}</h2>
+                            <div class="flex items-center gap-4 text-sm text-gray-400 mb-8">
+                                <span>📍 ${v.origin}</span>
+                                <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                                <span class="italic font-mono text-[10px]">${v.bio}</span>
+                            </div>
+                            
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 pb-2 border-b">Agronomik Analiz</h4>
+                            <p class="text-sm leading-relaxed text-gray-600 mb-8">${v.desc}</p>
+
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 pb-2 border-b">Duyusal Profil</h4>
+                            <div class="bg-light p-6 rounded-2xl border-l-4 border-accent italic text-gray-800 text-sm">
+                                "${v.cup}"
+                            </div>
+                        </div>
+
+                        <!-- Right Stats -->
+                        <div class="w-full md:w-64 bg-gray-50 p-8 rounded-3xl">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6 text-center">Performans</h4>
+                            <div class="space-y-6">
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-black mb-2"><span>KALİTE</span><span>${v.quality}%</span></div>
+                                    <div class="stat-bar"><div class="stat-fill" style="width: ${v.quality}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-black mb-2"><span>VERİM</span><span>${v.yield}%</span></div>
+                                    <div class="stat-bar"><div class="stat-fill" style="width: ${v.yield}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-black mb-2"><span>DİRENÇ</span><span>${v.disease}%</span></div>
+                                    <div class="stat-bar"><div class="stat-fill" style="width: ${v.disease}%"></div></div>
+                                </div>
+                            </div>
+
+                          
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) closeModal();
+        }
+
+        // Başlangıç
+        window.onload = () => renderGrid(varieties);
+    </script>
+</body>
+</html>
