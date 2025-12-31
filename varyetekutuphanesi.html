@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="h-full overflow-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetra N - Varyete Kütüphanesi (V2.0)</title>
+    <title>Tetra N - Varyete Kütüphanesi (V2.1 - iframe Optimized)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap');
@@ -18,6 +18,16 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--light);
             color: var(--primary);
+            margin: 0;
+            height: 100%;
+            overflow: hidden; /* Dış scroll'u engelle */
+        }
+
+        /* iframe içindeki scroll'un pürüzsüz olması için */
+        #app-root {
+            height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* iOS için pürüzsüz kaydırma */
             scroll-behavior: smooth;
         }
 
@@ -60,58 +70,68 @@
             transition: width 1.2s ease-in-out;
         }
 
-        .search-bar:focus {
-            border-color: var(--accent);
-            ring: 2px solid var(--accent);
-        }
-
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--light); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        #app-root::-webkit-scrollbar { width: 6px; }
+        #app-root::-webkit-scrollbar-track { background: var(--light); }
+        #app-root::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="h-full">
 
-    <!-- Header -->
-    <header class="bg-black text-white py-16 px-6 text-center">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-6xl mb-4">Varyete Kütüphanesi</h1>
-            <p class="text-accent tracking-[0.3em] uppercase text-xs mb-8">Nitelikli Kahvenin Genetik Mirası</p>
-            <p class="text-gray-400 max-w-2xl mx-auto italic text-sm leading-relaxed">
-                "Küresel kahve endüstrisi, biyolojik çeşitlilik, iklim direnci ve duyusal mükemmellik arayışının kesişme noktasında kritik bir dönüşüm süreci yaşamaktadır."
-            </p>
-        </div>
-    </header>
+    <div id="app-root">
+        <!-- Header -->
+        <header class="bg-black text-white py-12 md:py-16 px-6 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-6xl mb-4">Varyete Kütüphanesi</h1>
+                <p class="text-accent tracking-[0.3em] uppercase text-[10px] md:text-xs mb-8">Nitelikli Kahvenin Genetik Mirası</p>
+                <p class="text-gray-400 max-w-2xl mx-auto italic text-xs md:text-sm leading-relaxed">
+                    "Küresel kahve endüstrisi, biyolojik çeşitlilik, iklim direnci ve duyusal mükemmellik arayışının kesişme noktasında kritik bir dönüşüm süreci yaşamaktadır."
+                </p>
+            </div>
+        </header>
 
-    <!-- Search & Navigation -->
-    <nav class="sticky top-0 bg-white shadow-lg z-40 py-6 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
-                <!-- Tabs -->
-                <div class="flex flex-wrap justify-center gap-2">
-                    <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold active-tab transition-all">HEPSİ</button>
-                    <button onclick="filterCategory('atalar')" id="tab-atalar" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">GELENEKSEL ATALAR</button>
-                    <button onclick="filterCategory('mutasyon')" id="tab-mutasyon" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">MUTASYONLAR</button>
-                    <button onclick="filterCategory('hibrit')" id="tab-hibrit" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">HİBRİT / MELEZ</button>
-                    <button onclick="filterCategory('bolgesel')" id="tab-bolgesel" class="tab-btn px-5 py-2 border border-gray-200 rounded-full text-xs font-bold transition-all">BÖLGESEL YILDIZLAR</button>
-                </div>
-                <!-- Search -->
-                <div class="relative w-full md:w-64">
-                    <input type="text" id="searchInput" placeholder="Varyete ara..." onkeyup="searchVarieties()" class="w-full px-4 py-2 rounded-full border border-gray-200 text-sm focus:outline-none focus:border-accent">
+        <!-- Search & Navigation -->
+        <nav class="sticky top-0 bg-white shadow-lg z-40 py-4 md:py-6 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <!-- Tabs -->
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-4 py-1.5 border border-gray-200 rounded-full text-[10px] font-bold active-tab transition-all">HEPSİ</button>
+                        <button onclick="filterCategory('atalar')" id="tab-atalar" class="tab-btn px-4 py-1.5 border border-gray-200 rounded-full text-[10px] font-bold transition-all">GELENEKSEL ATALAR</button>
+                        <button onclick="filterCategory('mutasyon')" id="tab-mutasyon" class="tab-btn px-4 py-1.5 border border-gray-200 rounded-full text-[10px] font-bold transition-all">MUTASYONLAR</button>
+                        <button onclick="filterCategory('hibrit')" id="tab-hibrit" class="tab-btn px-4 py-1.5 border border-gray-200 rounded-full text-[10px] font-bold transition-all">HİBRİT / MELEZ</button>
+                        <button onclick="filterCategory('bolgesel')" id="tab-bolgesel" class="tab-btn px-4 py-1.5 border border-gray-200 rounded-full text-[10px] font-bold transition-all">BÖLGESEL YILDIZLAR</button>
+                    </div>
+                    <!-- Search -->
+                    <div class="relative w-full md:w-64">
+                        <input type="text" id="searchInput" placeholder="Varyete ara..." onkeyup="searchVarieties()" class="w-full px-4 py-2 rounded-full border border-gray-200 text-xs focus:outline-none focus:border-accent">
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Main Grid -->
-    <main class="max-w-7xl mx-auto py-12 px-6">
-        <div id="variety-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- JS Content -->
-        </div>
-    </main>
+        <!-- Main Grid -->
+        <main class="max-w-7xl mx-auto py-8 md:py-12 px-6">
+            <div id="variety-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                <!-- JS Content -->
+            </div>
+        </main>
 
-    <!-- Modal -->
+        <!-- Footer -->
+        <footer class="bg-black text-white py-12 text-center px-6">
+            <div class="max-w-4xl mx-auto">
+                <p class="text-accent mb-4 tracking-[0.4em] font-bold text-xs">TETRA N ROASTERY</p>
+                <p class="text-gray-500 text-[10px] md:text-sm mb-8">35 Ton Kavrum, 125.000+ Fincan, Sonsuz Tutku.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] text-gray-600 border-t border-gray-900 pt-8">
+                    <div>Ankara Merkez Kavurmahanesi</div>
+                    <div>Nitelikli Kahve Uzmanlığı</div>
+                    <div>From Ankara with love 🖤</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal (Fixed, stays on top of app-root) -->
     <div id="modal" class="modal-overlay fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl">
             <button onclick="closeModal()" class="absolute top-6 right-6 text-2xl text-gray-400 hover:text-black z-10">✕</button>
@@ -119,31 +139,15 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-black text-white py-16 text-center px-6">
-        <div class="max-w-4xl mx-auto">
-            <p class="text-accent mb-4 tracking-[0.4em] font-bold">TETRA N ROASTERY</p>
-            <p class="text-gray-500 text-sm mb-8"></p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-gray-600 border-t border-gray-900 pt-8">
-             
-                <div>Nitelikli Kahve Uzmanlığı</div>
-                <div>From Ankara with love 🖤</div>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // PDF Verileri ve Genişletilmiş Varyete Listesi (53 Adet)
         const varieties = [
-            // GELENEKSEL ATALAR (Typica & Bourbon & Others)
+            // ... (Aynı 53 varyete verisi buraya gelir)
             { id: 'typica', name: 'Typica', category: 'atalar', origin: 'Etiyopya / Yemen', desc: 'Kahve dünyasının genetik temelidir. Temiz içimi ve narenciye tatlılığıyla bilinir.', quality: 90, yield: 40, disease: 20, cup: 'Narenciye, çiçeksi, zarif tatlılık.', bio: 'Coffea arabica (Tetraploid $2n=44$)' },
             { id: 'bourbon', name: 'Bourbon', category: 'atalar', origin: 'Reunion Adası', desc: 'Typica\'nın doğal mutasyonudur. Daha kompleks ve tatlı profiliyle ünlüdür.', quality: 94, yield: 55, disease: 30, cup: 'Karamel, esmer şeker, yoğun tatlılık.', bio: 'Typica türevi' },
             { id: 'sumatra', name: 'Sumatra', category: 'atalar', origin: 'Endonezya', desc: 'Typica grubuna ait, bölgeye özgü "Giling Basah" işlemiyle karakterize edilir.', quality: 85, yield: 50, disease: 40, cup: 'Topraksı, baharatlı, odunsu.', bio: 'Typica yerel varyetesi' },
             { id: 'java', name: 'Java', category: 'atalar', origin: 'Endonezya / Kamerun', desc: 'Typica kökenli, pas hastalığına karşı orta dirençli, uzun çekirdekli bir türdür.', quality: 88, yield: 60, disease: 60, cup: 'Çikolata, fındık, temiz bitiş.', bio: 'Typica grubu' },
             { id: 'moka', name: 'Moka', category: 'atalar', origin: 'Yemen', desc: 'Çok küçük meyveleri olan, genetik olarak Bourbon\'a yakın tarihi bir varyete.', quality: 92, yield: 30, disease: 30, cup: 'Çikolata, meyvemsi, kompleks.', bio: 'Bourbon türevi' },
             { id: 'heirloom', name: 'Heirloom', category: 'atalar', origin: 'Etiyopya', desc: 'Binlerce yıllık vahşi genetik havuzu temsil eden yerel miras türleridir.', quality: 98, yield: 50, disease: 70, cup: 'Yasemin, Earl Grey, şeftali.', bio: 'Yabani Arabica popülasyonu' },
-            
-            // MUTASYONLAR
             { id: 'caturra', name: 'Caturra', category: 'mutasyon', origin: 'Brezilya', desc: 'Bourbon\'un doğal "cüce" mutasyonudur. Yüksek verimliliğiyle bilinir.', quality: 85, yield: 85, disease: 40, cup: 'Limon asiditesi, orta gövde.', bio: 'Bourbon Mutasyonu' },
             { id: 'pacas', name: 'Pacas', category: 'mutasyon', origin: 'El Salvador', desc: 'Bourbon\'un doğal bodur mutasyonudur. El Salvador tarımı için kritiktir.', quality: 86, yield: 80, disease: 35, cup: 'Tatlılık, dengeli asidite.', bio: 'Bourbon Mutasyonu' },
             { id: 'villa-sarchi', name: 'Villa Sarchi', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Bourbon\'un bodur mutasyonudur. Yüksek rakımlarda çok başarılıdır.', quality: 88, yield: 75, disease: 45, cup: 'Canlı asidite, meyvemsi.', bio: 'Bourbon Mutasyonu' },
@@ -151,9 +155,7 @@
             { id: 'san-ramon', name: 'San Ramon', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Typica\'nın bodur mutasyonu. Rüzgara karşı çok dirençlidir.', quality: 82, yield: 70, disease: 30, cup: 'Klasik Typica profili.', bio: 'Typica Mutasyonu' },
             { id: 'tekisic', name: 'Tekisic', category: 'mutasyon', origin: 'El Salvador', desc: 'Bourbon\'dan seçilmiş, çok yüksek fincan kalitesine sahip bir hattır.', quality: 93, yield: 50, disease: 35, cup: 'Yoğun tatlılık, kremsi gövde.', bio: 'Bourbon Seleksiyonu' },
             { id: 'venecia', name: 'Venecia', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Caturra seleksiyonu, geç olgunlaşır ve yağmura dirençlidir.', quality: 86, yield: 80, disease: 40, cup: 'Temiz içim, yüksek tatlılık.', bio: 'Caturra seleksiyonu' },
-            { id: 'villalobos', name: 'Villalobos', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Typica mutasyonu, asiditesi çok parlak ve kalitelidir.', quality: 89, yield: 50, disease: 30, cup: 'Parlak asidite, çiçeksi.', bio: 'Typica Mutasyonu' },
-
-            // HİBRİTLER / MELEZLER (Introgresive & Crosses)
+            { id: 'villalobos', name: 'Villalobos', category: 'mutasyon', origin: 'Kosta Rika', desc: 'Typica mutasyonu, asiditesi çok parlak ve kalidir.', quality: 89, yield: 50, disease: 30, cup: 'Parlak asidite, çiçeksi.', bio: 'Typica Mutasyonu' },
             { id: 'mundo-novo', name: 'Mundo Novo', category: 'hibrit', origin: 'Brezilya', desc: 'Typica ve Bourbon\'un doğal melezidir. Güçlü ve dayanıklıdır.', quality: 82, yield: 90, disease: 50, cup: 'Fındık, karamel, düşük asidite.', bio: 'Natural Hybrid' },
             { id: 'catuai', name: 'Catuai', category: 'hibrit', origin: 'Brezilya', desc: 'Mundo Novo ve Caturra melezi. Rüzgar ve yağmura çok dirençlidir.', quality: 83, yield: 95, disease: 45, cup: 'Çikolata, temiz bitiş.', bio: 'Cross (Yapay Melez)' },
             { id: 'pacamara', name: 'Pacamara', category: 'hibrit', origin: 'El Salvador', desc: 'Pacas ve Maragogype melezi. Çok büyük çekirdekli ve kompleks.', quality: 95, yield: 60, disease: 40, cup: 'Tropikal meyveler, baharat, gövde.', bio: 'Cross' },
@@ -176,8 +178,6 @@
             { id: 'evaluna', name: 'Evaluna', category: 'hibrit', origin: 'Orta Amerika', desc: 'Yeni nesil F1, kalite potansiyeli çok yüksektir.', quality: 92, yield: 90, disease: 95, cup: 'Kayısı, çiçeksi.', bio: 'F1 Hybrid' },
             { id: 'icatu', name: 'Icatu', category: 'hibrit', origin: 'Brezilya', desc: 'Robusta ve Bourbon arasındaki karmaşık melezlemelerin sonucudur.', quality: 84, yield: 90, disease: 85, cup: 'Kakao, yoğun gövde.', bio: 'Interspecific Hybrid' },
             { id: 'arara', name: 'Arara', category: 'hibrit', origin: 'Brezilya', desc: 'Sarchimor ve Yellow Catuai melezi, sarı meyveli, çok tatlı.', quality: 91, yield: 85, disease: 90, cup: 'Bal, kremsi, sarı meyveler.', bio: 'Natural Hybrid (Brezilya)' },
-
-            // BÖLGESEL YILDIZLAR (Kenya & Ethiopia & Special)
             { id: 'sl28', name: 'SL-28', category: 'bolgesel', origin: 'Kenya', desc: 'Meyve suyu berraklığında asiditesiyle ikonik Kenya varyetesi.', quality: 97, yield: 65, disease: 30, cup: 'Siyah frenk üzümü, domates asiditesi.', bio: 'Bourbon grubu' },
             { id: 'sl34', name: 'SL-34', category: 'bolgesel', origin: 'Kenya', desc: 'SL-28\'e benzer ancak yüksek rakımda ve yağışta daha dayanıklıdır.', quality: 95, yield: 70, disease: 35, cup: 'Gövde, kompleks asidite.', bio: 'Typica grubu türevi' },
             { id: 'batian', name: 'Batian', category: 'bolgesel', origin: 'Kenya', desc: 'Pas direnci yüksek ve kalitesi SL-28 ile yarışan yeni Kenya yıldızı.', quality: 94, yield: 90, disease: 85, cup: 'Vişne, siyah çay, parlak.', bio: 'Composite Variety' },
@@ -198,9 +198,9 @@
         ];
 
         let currentFilter = 'all';
+        const grid = document.getElementById('variety-grid');
 
         function renderGrid(data) {
-            const grid = document.getElementById('variety-grid');
             if (data.length === 0) {
                 grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-400">Aradığınız kriterde varyete bulunamadı.</div>';
                 return;
@@ -264,7 +264,6 @@
             content.innerHTML = `
                 <div class="p-8 md:p-12">
                     <div class="flex flex-col md:flex-row gap-8">
-                        <!-- Left Info -->
                         <div class="flex-1">
                             <span class="text-accent font-black uppercase tracking-[0.2em] text-[10px]">${v.category}</span>
                             <h2 class="text-4xl md:text-5xl font-bold mt-2 mb-4">${v.name}</h2>
@@ -283,8 +282,7 @@
                             </div>
                         </div>
 
-                        <!-- Right Stats -->
-                        <div class="w-full md:w-64 bg-gray-50 p-8 rounded-3xl">
+                        <div class="w-full md:w-64 bg-gray-50 p-8 rounded-3xl h-fit">
                             <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6 text-center">Performans</h4>
                             <div class="space-y-6">
                                 <div>
@@ -300,21 +298,16 @@
                                     <div class="stat-bar"><div class="stat-fill" style="width: ${v.disease}%"></div></div>
                                 </div>
                             </div>
-
-                          
-                            </div>
                         </div>
                     </div>
                 </div>
             `;
 
             modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
         }
 
         window.onclick = function(event) {
@@ -322,7 +315,6 @@
             if (event.target == modal) closeModal();
         }
 
-        // Başlangıç
         window.onload = () => renderGrid(varieties);
     </script>
 </body>
