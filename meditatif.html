@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Coffee Feature</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#f36926',
+                            dark: '#1c1917',
+                            cream: '#fdfbf7',
+                            stone: '#e7e5e4',
+                            pattern: '#f5f0eb' 
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .slow-zoom {
+            transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .group:hover .slow-zoom {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-white p-4 md:p-12 flex justify-center items-center min-h-[500px]">
+
+    <!-- Widget Container Start -->
+    <!-- target="_blank" eklendi: Linke tıklandığında yeni sekmede açılacak -->
+    <a href="https://tetranroastery.com/blog/slow-coffee-manuel-demlemenin-meditatif-gucu" target="_blank" rel="noopener noreferrer" class="group relative w-full max-w-5xl mx-auto bg-brand-cream rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-500 flex flex-col md:flex-row cursor-pointer border border-brand-stone">
+        
+        <!-- Image Section (Sol Taraf) -->
+        <div class="w-full md:w-1/2 h-72 md:h-auto relative overflow-hidden bg-brand-pattern flex items-center justify-center">
+            
+            <!-- Fallback Pattern -->
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#c4a484 1px, transparent 1px); background-size: 20px 20px;"></div>
+            <i data-lucide="coffee" class="w-16 h-16 text-brand-stone absolute z-0 opacity-50"></i>
+
+            <!-- Görsel -->
+            <img src="https://cdn.myikas.com/images/4fe7a638-08b1-4511-af04-b1e5c46eff18/81405452-4469-4c8c-986d-fdfecfa7847c/image_1080.webp" 
+                 alt="Manuel Kahve Demleme V60" 
+                 class="absolute inset-0 w-full h-full object-cover slow-zoom opacity-90 group-hover:opacity-100 z-10">
+            
+            <!-- Overlay Gradient -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/5 z-20"></div>
+            
+            <!-- Mobil İçin Etiket -->
+            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase text-brand-dark md:hidden z-30 shadow-sm">
+                Blog
+            </div>
+        </div>
+
+        <!-- Content Section (Sağ Taraf) -->
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative bg-brand-cream">
+            
+            <!-- Dekoratif Arka Plan İkonu -->
+            <div class="absolute top-4 right-4 text-brand-stone opacity-30">
+                <i data-lucide="coffee" class="w-24 h-24"></i>
+            </div>
+
+            <!-- Üst Başlık -->
+            <div class="flex items-center space-x-2 mb-4">
+                <span class="w-8 h-[1px] bg-brand-orange"></span>
+                <span class="text-xs font-bold tracking-widest uppercase text-brand-orange">Zihinsel Mola</span>
+            </div>
+
+            <!-- Ana Başlık -->
+            <h2 class="font-serif text-3xl md:text-4xl text-brand-dark leading-tight mb-4 group-hover:text-brand-orange transition-colors duration-300">
+                Hız Çağında Bir Nefes: <br>
+                <span class="italic text-gray-600 font-light">Slow Coffee</span>
+            </h2>
+
+            <!-- Açıklama -->
+            <p class="text-gray-600 font-light leading-relaxed mb-8 text-sm md:text-base">
+                Sabah kahveniz sadece bir kafein kaynağı mı, yoksa günün en huzurlu 3 dakikası mı? Nörobilim ve Japon felsefesi ışığında, manuel demlemenin iyileştirici gücünü ve "an"da kalmanın sırrını keşfedin.
+            </p>
+
+            <!-- Buton / Link Görünümü -->
+            <div class="flex items-center text-brand-dark font-medium group-hover:translate-x-2 transition-transform duration-300">
+                <span class="border-b-2 border-brand-orange pb-1">Ritüeli Keşfet</span>
+                <i data-lucide="arrow-right" class="w-5 h-5 ml-2 text-brand-orange"></i>
+            </div>
+
+            <!-- Alt Bilgi -->
+            <div class="mt-8 flex items-center space-x-4 text-xs text-gray-400 border-t border-brand-stone pt-4">
+                <div class="flex items-center">
+                    <i data-lucide="clock" class="w-3 h-3 mr-1"></i> 6 dk Okuma
+                </div>
+                <div class="flex items-center">
+                    <i data-lucide="brain-circuit" class="w-3 h-3 mr-1"></i> Nörobilim & Kültür
+                </div>
+            </div>
+        </div>
+    </a>
+    <!-- Widget Container End -->
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
