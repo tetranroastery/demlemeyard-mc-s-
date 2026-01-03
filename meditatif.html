@@ -1,47 +1,48 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slow Coffee Feature</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            orange: '#f36926',
-                            dark: '#1c1917',
-                            cream: '#fdfbf7',
-                            stone: '#e7e5e4',
-                            pattern: '#f5f0eb' 
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+<!-- Iframe/Embed Başlangıcı -->
+
+<!-- Gerekli Kütüphaneler (Her ihtimale karşı en üstte) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+
+<!-- Tailwind Config -->
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    brand: {
+                        orange: '#f36926',
+                        dark: '#1c1917',
+                        cream: '#fdfbf7',
+                        stone: '#e7e5e4',
+                        pattern: '#f5f0eb' 
                     }
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                    serif: ['Playfair Display', 'serif'],
                 }
             }
         }
-    </script>
-    <style>
-        .slow-zoom {
-            transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .group:hover .slow-zoom {
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body class="bg-white p-4 md:p-12 flex justify-center items-center min-h-[500px]">
+    }
+</script>
+
+<style>
+    .slow-zoom {
+        transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .group:hover .slow-zoom {
+        transform: scale(1.05);
+    }
+</style>
+
+<!-- Ana Kapsayıcı (Body yerine Div kullanıldı ve yükseklik garanti altına alındı) -->
+<div class="w-full bg-white p-4 md:p-12 flex justify-center items-center" style="min-height: 500px;">
 
     <!-- Widget Container Start -->
-    <!-- target="_blank" eklendi: Linke tıklandığında yeni sekmede açılacak -->
-    <a href="https://tetranroastery.com/blog/slow-coffee-manuel-demlemenin-meditatif-gucu" target="_blank" rel="noopener noreferrer" class="group relative w-full max-w-5xl mx-auto bg-brand-cream rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-500 flex flex-col md:flex-row cursor-pointer border border-brand-stone">
+    <!-- target="_blank" ile yeni sekme özelliği aktif -->
+    <a href="https://tetranroastery.com/blog/slow-coffee-manuel-demlemenin-meditatif-gucu" target="_blank" rel="noopener noreferrer" class="group relative w-full max-w-5xl mx-auto bg-brand-cream rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-500 flex flex-col md:flex-row cursor-pointer border border-brand-stone no-underline">
         
         <!-- Image Section (Sol Taraf) -->
         <div class="w-full md:w-1/2 h-72 md:h-auto relative overflow-hidden bg-brand-pattern flex items-center justify-center">
@@ -53,7 +54,8 @@
             <!-- Görsel -->
             <img src="https://cdn.myikas.com/images/4fe7a638-08b1-4511-af04-b1e5c46eff18/81405452-4469-4c8c-986d-fdfecfa7847c/image_1080.webp" 
                  alt="Manuel Kahve Demleme V60" 
-                 class="absolute inset-0 w-full h-full object-cover slow-zoom opacity-90 group-hover:opacity-100 z-10">
+                 class="absolute inset-0 w-full h-full object-cover slow-zoom opacity-90 group-hover:opacity-100 z-10"
+                 style="display: block;"> <!-- display:block eklendi -->
             
             <!-- Overlay Gradient -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/5 z-20"></div>
@@ -65,7 +67,7 @@
         </div>
 
         <!-- Content Section (Sağ Taraf) -->
-        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative bg-brand-cream">
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative bg-brand-cream text-left">
             
             <!-- Dekoratif Arka Plan İkonu -->
             <div class="absolute top-4 right-4 text-brand-stone opacity-30">
@@ -74,12 +76,12 @@
 
             <!-- Üst Başlık -->
             <div class="flex items-center space-x-2 mb-4">
-                <span class="w-8 h-[1px] bg-brand-orange"></span>
+                <span class="w-8 h-[1px] bg-brand-orange inline-block"></span>
                 <span class="text-xs font-bold tracking-widest uppercase text-brand-orange">Zihinsel Mola</span>
             </div>
 
             <!-- Ana Başlık -->
-            <h2 class="font-serif text-3xl md:text-4xl text-brand-dark leading-tight mb-4 group-hover:text-brand-orange transition-colors duration-300">
+            <h2 class="font-serif text-3xl md:text-4xl text-brand-dark leading-tight mb-4 group-hover:text-brand-orange transition-colors duration-300 m-0">
                 Hız Çağında Bir Nefes: <br>
                 <span class="italic text-gray-600 font-light">Slow Coffee</span>
             </h2>
@@ -108,8 +110,15 @@
     </a>
     <!-- Widget Container End -->
 
+    <!-- İkonları Başlat -->
     <script>
-        lucide.createIcons();
+        // Lucide ikonlarını yükle (gecikmeli yükleme önlemi)
+        document.addEventListener("DOMContentLoaded", function() {
+            lucide.createIcons();
+        });
+        // Hemen yükle (DOMContentLoaded çalışmazsa diye yedek)
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     </script>
-</body>
-</html>
+</div>
