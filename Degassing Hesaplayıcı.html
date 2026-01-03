@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra N Roastery - Lezzet Zamanlayıcısı</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Config for Brand Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#c4a484',
+                        slate: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    },
+                    animation: {
+                        slideUp: 'slideUp 0.5s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        /* Date input custom styling */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#f8f5f2] text-gray-800 flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-slate-900 text-white py-12 px-4 relative overflow-hidden">
+        <div class="max-w-3xl mx-auto text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-brand">TETRA N ROASTERY</h1>
+            <p class="text-xl font-light italic mb-2">"Her kahve bir hikaye anlatır."</p>
+            <div class="flex justify-center items-center space-x-2 text-sm text-gray-400">
+                <i data-lucide="map-pin" class="w-4 h-4"></i>
+                <span>From Ankara with Love</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-6 flex justify-center items-start pt-10">
+        <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            
+            <!-- Tool Header -->
+            <div class="bg-brand p-6 text-white text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="bg-white/20 p-3 rounded-full">
+                        <i data-lucide="clock" class="w-8 h-8 text-white"></i>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Lezzet Zamanlayıcısı</h2>
+                <p class="opacity-90 text-sm md:text-base px-4">
+                    Kahvenin kavrulduktan sonra nefes almaya ihtiyacı vardır. 
+                    En iyi aromayı yakalamak için doğru zamanı hesaplayın.
+                </p>
+            </div>
+
+            <div class="p-8 space-y-8">
+                <!-- Input Section -->
+                <div class="space-y-6">
+                    
+                    <!-- Date Input -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                            Paket üzerindeki Kavrulma Tarihi
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="date" 
+                                id="roastDateInput"
+                                class="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand focus:border-brand outline-none text-lg text-slate-800 font-medium transition-all"
+                            />
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i data-lucide="calendar" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Method Selection -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
+                            Nasıl Demleyeceksiniz?
+                        </label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="methodButtons">
+                            <!-- Espresso Button -->
+                            <button
+                                type="button"
+                                data-method="espresso"
+                                class="method-btn flex items-center justify-center p-4 rounded-xl border transition-all duration-200 font-medium bg-slate-800 text-white border-slate-800 shadow-md transform scale-105"
+                            >
+                                <i data-lucide="coffee" class="w-4 h-4 mr-2"></i> Espresso
+                            </button>
+                            
+                            <!-- Filter Button -->
+                            <button
+                                type="button"
+                                data-method="filter"
+                                class="method-btn flex items-center justify-center p-4 rounded-xl border transition-all duration-200 font-medium bg-white text-gray-600 border-gray-200 hover:border-brand hover:bg-orange-50"
+                            >
+                                <i data-lucide="coffee" class="w-4 h-4 mr-2"></i> Filtre / V60
+                            </button>
+                            
+                            <!-- Immersion Button -->
+                            <button
+                                type="button"
+                                data-method="immersion"
+                                class="method-btn flex items-center justify-center p-4 rounded-xl border transition-all duration-200 font-medium bg-white text-gray-600 border-gray-200 hover:border-brand hover:bg-orange-50"
+                            >
+                                <i data-lucide="coffee" class="w-4 h-4 mr-2"></i> French Press
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Results Section (Initially Hidden) -->
+                <div id="resultContainer" class="hidden animate-slideUp bg-[#f8f5f2] rounded-2xl p-6 border-2 border-[#eaddcf] relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-brand opacity-10 rounded-full blur-xl"></div>
+                    
+                    <h3 class="text-center text-lg font-bold text-slate-800 mb-6 border-b border-[#eaddcf] pb-4">
+                        Degassing (Gaz Salınımı) Takvimi
+                    </h3>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
+                        <!-- Min Date -->
+                        <div class="text-center w-full">
+                            <div class="text-xs font-bold text-gray-400 uppercase mb-1">İçime Hazır</div>
+                            <div id="minDateDisplay" class="text-xl font-bold text-slate-700 bg-white py-3 px-4 rounded-lg shadow-sm border border-gray-100">
+                                -
+                            </div>
+                            <div id="minDaysDisplay" class="text-xs text-gray-400 mt-1">(-. Gün)</div>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="hidden md:block text-brand">
+                            <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                        </div>
+                        <div class="md:hidden text-brand">
+                            <i data-lucide="arrow-down" class="w-6 h-6"></i>
+                        </div>
+
+                        <!-- Ideal Date -->
+                        <div class="text-center w-full relative">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-brand text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10 whitespace-nowrap">
+                                
+                            </div>
+                            <div class="text-s font-bold text-brand uppercase mb-1">Mükemmel Lezzet</div>
+                            <div id="idealDateDisplay" class="text-xl font-bold text-white bg-slate-800 py-3 px-4 rounded-lg shadow-md border border-slate-800">
+                                -
+                            </div>
+                            <div id="idealDaysDisplay" class="text-xs text-gray-400 mt-1">(-. Gün)</div>
+                        </div>
+                    </div>
+
+                    <!-- Note -->
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 flex items-start space-x-3 text-sm text-gray-600 shadow-sm">
+                        <div class="flex-shrink-0 text-brand mt-0.5">
+                            <i data-lucide="info" class="w-5 h-5"></i>
+                        </div>
+                        <p id="noteDisplay">Not buraya gelecek...</p>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="text-center py-8 text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                    <div class="flex justify-center mb-3 opacity-50">
+                        <i data-lucide="alert-circle" class="w-8 h-8"></i>
+                    </div>
+                    <p>Hesaplama yapmak için lütfen kavrulma tarihini seçin.</p>
+                </div>
+
+                <!-- Scientific Context -->
+                <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-500 text-justify leading-relaxed">
+                    <p>
+                        <strong>Neden Bekliyoruz?</strong> Kavurma işlemi sırasında çekirdek içinde CO2 gazı hapsolur. 
+                        Bu gaz, taze kahvede suyun çekirdeğe işlemesini engelleyen bir bariyer oluşturur (hidrofobik etki). 
+                        Bu süre zarfında gaz dışarı atılırken, aromatik bileşikler çekirdekte kalmaya devam eder. 
+                        Buna "Degassing" denir. En iyi fincan, gazın azaldığı ama aromanın hala zirvede olduğu o "Sweet Spot" anında gizlidir.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-8 text-center mt-auto">
+        <div class="max-w-4xl mx-auto px-4">
+            <p class="text-gray-400 mb-2 text-sm">Kahve bir içecekten fazlasıdır: kültürdür, zanaattır, tutkudur.</p>
+            <div class="flex justify-center items-center text-brand space-x-2 text-sm font-medium">
+                <span>Tetra N Roastery</span>
+                <i data-lucide="heart" class="w-4 h-4 fill-current"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // İkonları oluştur
+        lucide.createIcons();
+
+        // State Değişkenleri
+        let roastDate = '';
+        let currentMethod = 'espresso';
+
+        // DOM Elementleri
+        const dateInput = document.getElementById('roastDateInput');
+        const methodButtons = document.querySelectorAll('.method-btn');
+        const resultContainer = document.getElementById('resultContainer');
+        const emptyState = document.getElementById('emptyState');
+        
+        // Çıktı Elementleri
+        const minDateDisplay = document.getElementById('minDateDisplay');
+        const minDaysDisplay = document.getElementById('minDaysDisplay');
+        const idealDateDisplay = document.getElementById('idealDateDisplay');
+        const idealDaysDisplay = document.getElementById('idealDaysDisplay');
+        const noteDisplay = document.getElementById('noteDisplay');
+
+        // Hesaplama Fonksiyonu
+        function calculateAndRender() {
+            if (!roastDate) {
+                resultContainer.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            // PDF Verilerine Göre Mantık
+            let minDays, idealDays, note;
+
+            switch (currentMethod) {
+                case 'espresso':
+                    minDays = 10;
+                    idealDays = 21;
+                    note = "Espresso yüksek basınçla demlendiği için gaz (CO2) çıkışı çok kritiktir. Erken içimde krema çok köpüklü olur ve asidite keskinleşir. Sabır, espresso'nun anahtarıdır.";
+                    break;
+                case 'filter':
+                    minDays = 5;
+                    idealDays = 7;
+                    note = "V60 veya filtre kahve için bu süre, 'blooming' (çiçeklenme) aşamasının verimli geçmesini ve aromaların netleşmesini sağlar.";
+                    break;
+                case 'immersion':
+                    minDays = 2;
+                    idealDays = 5;
+                    note = "French Press gibi yöntemlerde su ve kahve uzun süre temas eder, bu da gazın atılmasını kolaylaştırır. Daha erken içime uygundur.";
+                    break;
+                default:
+                    minDays = 7;
+                    idealDays = 10;
+                    note = "";
+            }
+
+            const rDate = new Date(roastDate);
+            
+            // Min Tarih
+            const minDate = new Date(rDate);
+            minDate.setDate(rDate.getDate() + minDays);
+
+            // Ideal Tarih
+            const sweetSpotDate = new Date(rDate);
+            sweetSpotDate.setDate(rDate.getDate() + idealDays);
+
+            // Formatlama Seçenekleri
+            const options = { day: 'numeric', month: 'long', weekday: 'long' };
+            const formatter = new Intl.DateTimeFormat('tr-TR', options);
+
+            // UI Güncelleme
+            minDateDisplay.textContent = formatter.format(minDate);
+            minDaysDisplay.textContent = `(${minDays}. Gün)`;
+            
+            idealDateDisplay.textContent = formatter.format(sweetSpotDate);
+            idealDaysDisplay.textContent = `(${idealDays}. Gün)`;
+            
+            noteDisplay.textContent = note;
+
+            // Göster/Gizle
+            emptyState.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+        }
+
+        // Event Listeners: Tarih Değişimi
+        dateInput.addEventListener('change', (e) => {
+            roastDate = e.target.value;
+            calculateAndRender();
+        });
+
+        // Event Listeners: Yöntem Değişimi
+        methodButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Yöntemi güncelle
+                currentMethod = btn.getAttribute('data-method');
+
+                // Görsel Stil Güncellemesi (Active/Inactive Class'ları)
+                methodButtons.forEach(b => {
+                    // Reset to default style
+                    b.className = "method-btn flex items-center justify-center p-4 rounded-xl border transition-all duration-200 font-medium bg-white text-gray-600 border-gray-200 hover:border-brand hover:bg-orange-50";
+                });
+
+                // Set active style
+                btn.className = "method-btn flex items-center justify-center p-4 rounded-xl border transition-all duration-200 font-medium bg-slate-800 text-white border-slate-800 shadow-md transform scale-105";
+
+                // Yeniden Hesapla
+                calculateAndRender();
+            });
+        });
+
+    </script>
+</body>
+</html>
