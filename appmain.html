@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anasayfa Uygulama Banner'ı</title>
+    <!-- Tailwind CSS (Eğer anasayfanızda zaten varsa bu kısmı silebilirsiniz) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        coffee: {
+                            50: '#fdf8f5',
+                            100: '#f8ede6',
+                            700: '#9b4f35',
+                            800: '#80422e',
+                            900: '#683728',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white p-4 md:p-8 flex items-center justify-center min-h-screen">
+
+    <!-- ANASAYFAYA EKLENECEK KISIM BURADAN BAŞLIYOR -->
+    <section class="w-full max-w-6xl mx-auto">
+        <div class="relative overflow-hidden bg-coffee-50 border border-coffee-100 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-300">
+            <!-- Arka Plan Deseni -->
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-coffee-100 rounded-full opacity-50 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-coffee-200 rounded-full opacity-30 blur-2xl"></div>
+
+            <div class="relative p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                
+                <!-- Metin İçeriği -->
+                <div class="flex flex-col sm:flex-row items-center sm:items-start lg:items-center gap-6 text-center sm:text-left lg:w-1/2">
+                    <div class="w-16 h-16 shrink-0 bg-white rounded-2xl shadow-sm border border-stone-100 flex items-center justify-center text-coffee-700">
+                        <i data-lucide="smartphone" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-white text-coffee-800 font-semibold text-xs mb-3 border border-coffee-100 shadow-sm uppercase tracking-wider">
+                            <i data-lucide="zap" class="w-3 h-3 mr-1.5 fill-current text-yellow-500"></i>
+                            Yeni Uygulamamız Yayında
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mb-2">
+                            Tetra N Roastery Kahve Araç Kiti
+                        </h3>
+                        <p class="text-stone-600 text-sm sm:text-base">
+                            Demleme günlükleri, akıllı envanter takibi, gelişmiş hesaplayıcılar ve daha fazlası. Kahve deneyiminizi dijitale taşıyın, hemen indirin!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Butonlar -->
+                <div class="flex flex-col sm:flex-row flex-wrap gap-3 lg:w-1/2 lg:justify-end w-full mt-4 lg:mt-0">
+                    <a href="https://tetranroastery.com/pages/kahve-arac-kiti" class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold text-coffee-800 transition-all duration-200 bg-coffee-100 border border-coffee-200 rounded-xl shadow-sm hover:bg-coffee-200 hover:-translate-y-0.5">
+                        <i data-lucide="info" class="w-4 h-4 mr-2"></i>
+                        Ayrıntılı Bilgi
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.base698597b24b9cf7a2ff9e9aa2.app" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 bg-coffee-700 border border-transparent rounded-xl shadow-sm hover:bg-coffee-800 hover:-translate-y-0.5">
+                        <i data-lucide="play" class="w-4 h-4 mr-2 fill-current"></i>
+                        Google Play
+                    </a>
+                    <div class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold text-stone-500 transition-all duration-200 bg-white border border-stone-200 rounded-xl cursor-default shadow-sm">
+                        <i data-lucide="apple" class="w-4 h-4 mr-2 fill-current"></i>
+                        Yakında iOS'ta
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- ANASAYFAYA EKLENECEK KISIM BURADA BİTİYOR -->
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
